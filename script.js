@@ -390,6 +390,7 @@ const reduceMotion = mq.matches;
     });
   }
 
+  let _hideSuccessTimer = null;
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     if(!validateNames() || !validateEmail()){
@@ -397,9 +398,22 @@ const reduceMotion = mq.matches;
       return;
     }
     const success = document.querySelector('.form-success');
+    if(!success) return;
+
+    // clear any existing hide timer
+    if(_hideSuccessTimer) clearTimeout(_hideSuccessTimer);
+
     gsap.fromTo(success, { opacity:0, y:10 }, { opacity:1, y:0, duration:.5, ease:'power2.out' });
     success.classList.add('show');
     form.reset();
+
+    // hide the success message after 2 seconds
+    _hideSuccessTimer = setTimeout(() => {
+      gsap.to(success, { opacity:0, y:10, duration:.35, ease:'power2.in', onComplete: () => {
+        success.classList.remove('show');
+      }});
+      _hideSuccessTimer = null;
+    }, 2000);
   });
 })();
 
