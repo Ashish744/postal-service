@@ -48,6 +48,32 @@ const reduceMotion = mq.matches;
   }
 })();
 
+// Ensure stat numbers show their target values immediately (before scroll animation)
+window.addEventListener('load', () => {
+  document.querySelectorAll('.stat-num').forEach(el => {
+    const span = el.querySelector('span[data-count]');
+    if(!span) return;
+    const target = parseFloat(span.dataset.count);
+    if(isNaN(target)) return;
+    const isFloat = target % 1 !== 0;
+    span.textContent = isFloat ? target.toFixed(1) : Math.floor(target).toLocaleString();
+  });
+  // Reapply after a short delay to override any script-initialization that sets 0
+  let reapplies = 0;
+  const reapplier = setInterval(() => {
+    document.querySelectorAll('.stat-num').forEach(el => {
+      const span = el.querySelector('span[data-count]');
+      if(!span) return;
+      const target = parseFloat(span.dataset.count);
+      if(isNaN(target)) return;
+      const isFloat = target % 1 !== 0;
+      span.textContent = isFloat ? target.toFixed(1) : Math.floor(target).toLocaleString();
+    });
+    reapplies += 1;
+    if(reapplies > 10) clearInterval(reapplier); // stop after ~2s
+  }, 200);
+});
+
 /* -------------------------------------------------------------------------
    2. Magnetic buttons — cursor pull effect
 ------------------------------------------------------------------------- */
@@ -144,23 +170,12 @@ const reduceMotion = mq.matches;
    6. Stat counters
 ------------------------------------------------------------------------- */
 (function counters(){
-  document.querySelectorAll('.stat-num').forEach(el => {
-    const target = parseFloat(el.dataset.count);
+  // Non-animated initializer: populate stats from their `data-count` attributes.
+  document.querySelectorAll('.stat-num span[data-count]').forEach(span => {
+    const target = parseFloat(span.dataset.count);
     if(isNaN(target)) return;
-    const suffixEl = el.querySelector('.suffix');
-    const counter = { val: 0 };
-    ScrollTrigger.create({
-      trigger: el, start: 'top 85%', once: true,
-      onEnter: () => {
-        gsap.to(counter, {
-          val: target, duration: 2, ease: 'power2.out',
-          onUpdate: () => {
-            const isFloat = target % 1 !== 0;
-            el.firstChild.textContent = isFloat ? counter.val.toFixed(1) : Math.floor(counter.val).toLocaleString();
-          }
-        });
-      }
-    });
+    const isFloat = target % 1 !== 0;
+    span.textContent = isFloat ? target.toFixed(1) : Math.floor(target).toLocaleString();
   });
 })();
 
