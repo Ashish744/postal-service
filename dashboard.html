@@ -1,221 +1,770 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — Meridian Post</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="dashboard.css">
+<title>Route Analytics — Meridian Post</title>
+
+<style>
+/* ==========================================================================
+   MERIDIAN POST — analytics-dashboard.html
+   Single-file build: all CSS lives in this style block.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root{
+  /* ---- palette ---- */
+  --navy: #1C2541;
+  --navy-deep: #12182E;
+  --parchment: #F1E8D6;
+  --parchment-dim: #E7DBC2;
+  --cream: #FAF5E9;
+  --red: #BC3A2E;
+  --red-deep: #9C2E24;
+  --brass: #A8823C;
+  --ink: #211D18;
+  --ink-soft: #4A453C;
+  --white: #FFFDF8;
+
+  /* ---- type ---- */
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ---- misc ---- */
+  --ease-post: cubic-bezier(.22,1,.36,1);
+  --radius: 2px;
+  --stripe-size: 26px;
+  --container: 1240px;
+}
+
+*,*::before,*::after{ box-sizing: border-box; margin:0; padding:0; }
+
+html{ scroll-behavior: smooth; }
+
+body{
+  font-family: var(--font-body);
+  background: var(--parchment);
+  color: var(--ink);
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img{ max-width:100%; display:block; }
+
+a{ color:inherit; text-decoration:none; }
+
+ul{ list-style:none; }
+
+button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+
+input,textarea,select{ font-family:inherit; }
+
+::selection{ background: var(--red); color: var(--cream); }
+
+.logo-lockup{ display:flex; align-items:center; gap:12px; }
+
+.logo-mark{
+  width: auto;
+  height: 34px;
+  border-radius: 0;
+  display:block;
+  flex-shrink:0;
+  overflow:hidden;
+  filter: sepia(1) saturate(1700%) hue-rotate(-18deg) brightness(.85) contrast(1.05);
+}
+.logo-mark img, .logo-mark svg{ width:auto; height:100%; object-fit:contain; display:block; }
+
+.logo-text{ font-family: var(--font-display); font-size: 1.28rem; font-weight:700; letter-spacing:-.01em; }
+
+.logo-text small{ display:block; font-family: var(--font-mono); font-size:9.5px; letter-spacing:.22em; color: var(--red); font-weight:600; }
+
+.ph{
+  border: 1.5px dashed rgba(28,37,65,.4);
+  background: repeating-linear-gradient(135deg, rgba(28,37,65,.035) 0 10px, transparent 10px 20px);
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  color: var(--ink-soft); font-family: var(--font-mono); font-size:12px; letter-spacing:.06em;
+  border-radius: var(--radius);
+  min-height: 120px;
+  padding: 14px;
+}
+
+.ph span{ display:block; }
+
+.ph .ph-dim{ font-size:10.5px; opacity:.6; margin-top:4px; }
+
+/* ---------------------------------------------------------------------
+   Page-specific styles (bento-grid analytics dashboard)
+--------------------------------------------------------------------- */
+/* ==========================================================================
+   MERIDIAN POST — analytics.css
+   Bento-grid style dashboard (distinct layout from dashboard.css)
+   ========================================================================== */
+
+.an-body{ background: var(--cream); min-height:100vh; }
+
+/* ------------------------------- topbar ------------------------------------ */
+.an-topbar{
+  position: sticky; top:0; z-index: 100;
+  display:flex; align-items:center; justify-content:space-between; gap: 24px;
+  padding: 18px 40px; background: rgba(250,245,233,.9); backdrop-filter: blur(10px);
+  border-bottom: 1.5px solid rgba(28,37,65,.1);
+}
+.an-topbar-left{ display:flex; align-items:center; gap: 46px; }
+
+.an-tabs{ display:flex; gap: 6px; background: rgba(28,37,65,.06); padding: 5px; border-radius: 30px; }
+.an-tab{
+  padding: 9px 20px; border-radius: 24px; font-family: var(--font-mono); font-size: 12.5px;
+  letter-spacing:.03em; color: var(--ink-soft); transition: all .35s var(--ease-post); position:relative;
+}
+.an-tab.active{ background: var(--navy); color: var(--parchment); }
+.an-tab:not(.active):hover{ color: var(--ink); background: rgba(28,37,65,.08); }
+
+.an-topbar-right{ display:flex; align-items:center; gap: 18px; }
+.an-icon-btn{
+  width: 40px; height:40px; border-radius:50%; border: 1.5px solid rgba(28,37,65,.15);
+  display:flex; align-items:center; justify-content:center; position:relative;
+  transition: all .35s var(--ease-post);
+}
+.an-icon-btn svg{ width:17px; height:17px; stroke: var(--ink); transition: stroke .3s ease; }
+.an-icon-btn:hover{ background: var(--navy); border-color: var(--navy); transform: translateY(-2px) rotate(-6deg); }
+.an-icon-btn:hover svg{ stroke: var(--parchment); }
+.an-icon-btn .ping{ position:absolute; top:6px; right:7px; width:7px; height:7px; border-radius:50%; background: var(--red); }
+
+.an-avatar-btn{ display:flex; align-items:center; gap:10px; padding: 5px 14px 5px 5px; border-radius: 30px; border: 1.5px solid rgba(28,37,65,.15); transition: all .3s ease; }
+.an-avatar-btn:hover{ border-color: var(--brass); background: rgba(168,130,60,.08); }
+.an-avatar-btn .ph{ width:32px; height:32px; border-radius:50%; min-height:unset; }
+.an-avatar-btn span{ font-family: var(--font-mono); font-size:12px; }
+
+/* ------------------------------- content ------------------------------------ */
+.an-content{ padding: 40px; max-width: 1400px; margin: 0 auto; }
+
+.an-page-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap; margin-bottom: 30px; }
+.an-page-head h1{ font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.1rem); }
+.an-page-head p{ color: var(--ink-soft); margin-top:6px; font-size:.92rem; }
+.an-date-range{
+  display:flex; align-items:center; gap:10px; font-family: var(--font-mono); font-size:12px;
+  border: 1.5px solid rgba(28,37,65,.18); padding: 10px 16px; border-radius: 6px; background: var(--white);
+  transition: border-color .3s ease;
+}
+.an-date-range:hover{ border-color: var(--navy); }
+
+/* ------------------------------- bento grid ---------------------------------- */
+.an-bento{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 22px;
+}
+.an-card{
+  background: var(--white);
+  border: 1.5px solid rgba(28,37,65,.1);
+  border-radius: 14px;
+  padding: 26px;
+  position: relative;
+  overflow:hidden;
+  transition: transform .18s ease, box-shadow .4s var(--ease-post), border-color .4s ease;
+  will-change: transform;
+}
+.an-card:hover{ box-shadow: 0 20px 44px rgba(28,37,65,.13); border-color: rgba(28,37,65,.18); }
+
+.an-span-3{ grid-column: span 3; }
+.an-span-4{ grid-column: span 4; }
+.an-span-5{ grid-column: span 5; }
+.an-span-6{ grid-column: span 6; }
+.an-span-7{ grid-column: span 7; }
+.an-span-8{ grid-column: span 8; }
+.an-span-12{ grid-column: span 12; }
+
+.an-card-head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 20px; gap:12px; }
+.an-card-head h3{ font-family: var(--font-display); font-size: 1.12rem; }
+.an-card-head span.an-sub{ font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); display:block; margin-top:4px; }
+.an-card-more{ width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; color: var(--ink-soft); transition: all .3s ease; flex-shrink:0; }
+.an-card-more:hover{ background: rgba(28,37,65,.08); color: var(--ink); transform: rotate(90deg); }
+
+/* ---------------------------- profile / welcome card ------------------------- */
+.an-profile-card{ background: var(--navy); color: var(--parchment); border-color: var(--navy); }
+.an-profile-top{ display:flex; align-items:center; gap: 16px; margin-bottom: 22px; }
+.an-profile-top .ph{ width:56px; height:56px; border-radius:50%; min-height:unset; border-color: rgba(241,232,214,.4); }
+.an-profile-top b{ display:block; font-size: 1.05rem; }
+.an-profile-top span{ font-family: var(--font-mono); font-size:11px; color: var(--brass); }
+.an-profile-email{ display:block; font-family: var(--font-mono); font-size:12px; color: var(--ink-soft); margin-top: 4px; }
+.an-profile-quote{ font-family: var(--font-display); font-style:italic; font-size: 1.05rem; line-height:1.5; margin-bottom:22px; opacity:.92; }
+.an-profile-meta{ display:flex; justify-content:space-between; border-top: 1px solid rgba(241,232,214,.15); padding-top: 18px; }
+.an-profile-meta div{ text-align:left; }
+.an-profile-meta b{ display:block; font-family: var(--font-display); font-size:1.3rem; }
+.an-profile-meta span{ font-family: var(--font-mono); font-size:10px; color:#9AA1B8; text-transform:uppercase; letter-spacing:.05em; }
+
+/* ---------------------------- line chart card -------------------------------- */
+.an-chart-legend{ display:flex; gap: 18px; margin-bottom: 4px; }
+.an-legend-item{ display:flex; align-items:center; gap:8px; font-family: var(--font-mono); font-size:11px; color: var(--ink-soft); cursor:pointer; transition: opacity .3s ease; }
+.an-legend-item:hover{ opacity:.65; }
+.an-legend-dot{ width:8px; height:8px; border-radius:50%; }
+.an-chart-svg{ width:100%; height: 200px; overflow: visible; }
+.an-chart-line{ fill:none; stroke-width:2.5; }
+.an-chart-area{ opacity: .12; }
+.an-chart-point{ transition: r .25s ease; cursor:pointer; }
+.an-chart-point:hover{ r: 6; }
+.an-chart-tooltip{
+  position:absolute; background: var(--navy); color: var(--parchment); font-family: var(--font-mono);
+  font-size:11px; padding: 6px 10px; border-radius:4px; pointer-events:none; opacity:0; transform: translate(-50%,-130%);
+  transition: opacity .2s ease; white-space:nowrap;
+}
+.an-chart-tooltip.show{ opacity:1; }
+
+/* ---------------------------- coverage map card ------------------------------ */
+.an-map-card{ background: var(--navy); color: var(--parchment); border-color: var(--navy); }
+.an-map-svg{ width:100%; height: 220px; }
+.an-map-dot{ fill: var(--brass); cursor:pointer; }
+.an-map-pulse{ fill:none; stroke: var(--red); stroke-width:1.5; opacity:0; }
+.an-map-route{ fill:none; stroke: rgba(241,232,214,.3); stroke-width:1; stroke-dasharray: 4 6; }
+.an-map-legend{ display:flex; justify-content:space-between; margin-top: 14px; font-family: var(--font-mono); font-size:11px; color:#C9CEDD; }
+
+/* ---------------------------- activity feed ---------------------------------- */
+.an-activity-list{ display:flex; flex-direction:column; gap: 4px; }
+.an-activity-item{
+  display:flex; align-items:center; gap: 14px; padding: 12px 10px; border-radius: 8px;
+  transition: background .3s ease, transform .3s var(--ease-post);
+}
+.an-activity-item:hover{ background: rgba(28,37,65,.045); transform: translateX(4px); }
+.an-activity-icon{ width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition: transform .3s var(--ease-post); }
+.an-activity-item:hover .an-activity-icon{ transform: scale(1.12) rotate(-8deg); }
+.an-activity-icon svg{ width:15px; height:15px; }
+.an-activity-icon.pickup{ background: rgba(168,130,60,.14); } .an-activity-icon.pickup svg{ stroke: var(--brass); }
+.an-activity-icon.deliver{ background: rgba(91,138,91,.14); } .an-activity-icon.deliver svg{ stroke:#5B8A5B; }
+.an-activity-icon.delay{ background: rgba(188,58,46,.1); } .an-activity-icon.delay svg{ stroke: var(--red); }
+.an-activity-icon.sort{ background: rgba(28,37,65,.1); } .an-activity-icon.sort svg{ stroke: var(--navy); }
+.an-activity-body{ flex:1; min-width:0; }
+.an-activity-body b{ font-size:.86rem; display:block; }
+.an-activity-body span{ font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-soft); }
+.an-activity-time{ font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-soft); flex-shrink:0; }
+
+/* ---------------------------- upcoming pickups (calendar list) --------------- */
+.an-schedule-list{ display:flex; flex-direction:column; gap: 14px; }
+.an-schedule-item{
+  display:flex; gap: 14px; align-items:center; padding: 12px; border-radius: 8px;
+  border: 1px solid rgba(28,37,65,.08); transition: all .3s var(--ease-post);
+}
+.an-schedule-item:hover{ border-color: var(--brass); background: rgba(168,130,60,.05); transform: translateY(-2px); }
+.an-schedule-date{
+  width:46px; height:46px; border-radius:8px; background: var(--parchment); flex-shrink:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  font-family: var(--font-mono); line-height:1.1;
+}
+.an-schedule-date b{ font-size:1.05rem; }
+.an-schedule-date span{ font-size: 9px; text-transform:uppercase; color: var(--ink-soft); }
+.an-schedule-body b{ display:block; font-size:.85rem; }
+.an-schedule-body span{ font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-soft); }
+
+/* ---------------------------- top routes table -------------------------------- */
+.an-table{ width:100%; border-collapse: collapse; }
+.an-table th{
+  text-align:left; font-family: var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em;
+  color: var(--ink-soft); padding-bottom: 12px; border-bottom: 1.5px solid rgba(28,37,65,.1);
+}
+.an-table td{ padding: 13px 0; border-bottom: 1px solid rgba(28,37,65,.06); font-size: .85rem; }
+.an-table tr:last-child td{ border-bottom:none; }
+.an-table tbody tr{ transition: background .25s ease; }
+.an-table tbody tr:hover{ background: rgba(28,37,65,.03); }
+.an-route-bar-track{ width: 100%; height: 5px; background: rgba(28,37,65,.08); border-radius: 4px; overflow:hidden; }
+.an-route-bar-fill{ height:100%; background: var(--brass); border-radius:4px; width:0%; transition: background .3s ease; }
+.an-table tbody tr:hover .an-route-bar-fill{ background: var(--red); }
+
+/* ---------------------------- notifications/alerts --------------------------- */
+.an-alert-item{
+  display:flex; gap: 12px; padding: 13px; border-radius: 8px; margin-bottom: 10px;
+  border-left: 3px solid var(--brass); background: rgba(168,130,60,.06);
+  transition: all .3s ease; cursor: default;
+}
+.an-alert-item.critical{ border-left-color: var(--red); background: rgba(188,58,46,.06); }
+.an-alert-item:hover{ transform: translateX(4px); box-shadow: 0 8px 18px rgba(28,37,65,.08); }
+.an-alert-item b{ display:block; font-size:.82rem; margin-bottom:2px; }
+.an-alert-item p{ font-size:.78rem; color: var(--ink-soft); }
+.an-alert-dismiss{ margin-left:auto; color: var(--ink-soft); font-size:16px; line-height:1; flex-shrink:0; align-self:flex-start; transition: color .3s ease, transform .3s ease; }
+.an-alert-dismiss:hover{ color: var(--red); transform: rotate(90deg); }
+
+/* ---------------------------- goal donut card --------------------------------- */
+.an-donut-wrap{ display:flex; align-items:center; gap: 22px; }
+.an-donut-svg{ width: 110px; height:110px; flex-shrink:0; }
+.an-donut-track{ fill:none; stroke: rgba(28,37,65,.08); stroke-width: 10; }
+.an-donut-fill{ fill:none; stroke: var(--red); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 283; transform: rotate(-90deg); transform-origin: 50% 50%; }
+.an-donut-label b{ display:block; font-family: var(--font-display); font-size: 1.5rem; }
+.an-donut-label span{ font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-soft); }
+.an-donut-legend{ margin-top:16px; display:flex; flex-direction:column; gap:8px; }
+.an-donut-legend div{ display:flex; align-items:center; gap:8px; font-family: var(--font-mono); font-size:11px; color: var(--ink-soft); }
+.an-donut-legend .dot{ width:8px; height:8px; border-radius:50%; }
+
+/* ---------------------------- shared tag/badge -------------------------------- */
+.an-tag{ font-family: var(--font-mono); font-size:10px; padding:4px 10px; border-radius:20px; text-transform:uppercase; letter-spacing:.04em; }
+.an-tag.up{ background: rgba(91,138,91,.14); color:#3C6B3C; }
+.an-tag.down{ background: rgba(188,58,46,.1); color: var(--red); }
+
+/* responsive */
+@media (max-width: 1180px){
+  .an-span-3, .an-span-4, .an-span-5, .an-span-6, .an-span-7, .an-span-8{ grid-column: span 6; }
+}
+@media (max-width: 760px){
+  .an-content{ padding: 24px; }
+  .an-topbar{ padding: 16px 20px; }
+  .an-topbar-left{ gap: 18px; }
+  .an-tabs{ display:none; }
+  .an-span-3, .an-span-4, .an-span-5, .an-span-6, .an-span-7, .an-span-8, .an-span-12{ grid-column: span 12; }
+  .an-donut-wrap{ flex-direction:column; align-items:flex-start; }
+}
+
+</style>
 </head>
-<body>
+<body class="an-body">
 
-<div class="dash-shell">
 
-  <!-- ===================== SIDEBAR ===================== -->
-  <aside class="dash-sidebar">
-    <a href="index.html" class="logo-lockup" aria-label="Meridian Post home">
-      <img src="logo-dark-themed.webp" alt="Meridian Post logo" class="logo-mark">
-      <span class="logo-text">Meridian Post</span>
-    </a>
+<!-- ===================== TOPBAR ===================== -->
+<header class="an-topbar">
+  <div class="an-topbar-left">
+    <img src="logo-dark-themed.webp" alt="Stackly logo" class="logo-mark">
+  </div>
+  <div class="an-topbar-right">
+    <button class="an-icon-btn" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+    </button>
+    <button class="an-icon-btn" aria-label="Notifications" onclick="window.location.href='404error.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="ping"></span>
+    </button>
+    <button class="an-avatar-btn">
+      <div class="ph"><span></span></div>
+      <span id="an-profile-button">Jordan V.</span>
+    </button>
+  </div>
+</header>
 
-    <nav class="dash-nav">
-      <span class="dash-nav-label">Main</span>
-      <a href="dashboard.html" class="dash-nav-link active">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
-        Overview
-      </a>
-      <a href="404error.html" class="dash-nav-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
-        Shipments <span class="dash-nav-badge">6</span>
-      </a>
-      <a href="404error.html" class="dash-nav-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-        Track Package
-      </a>
-      <a href="404error.html" class="dash-nav-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Addresses
-      </a>
-      <span class="dash-nav-label">Account</span>
-      <a href="404error.html" class="dash-nav-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-        Billing
-      </a>
-      <a href="404error.html" class="dash-nav-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06A2 2 0 1 1 7.03 4.24l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 0 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.36.13.68.32 1.55 1H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg>
-        Settings
-      </a>
-    </nav>
+<div class="an-content">
 
-    <div class="dash-sidebar-footer">
-      <div class="ph dash-avatar"><span></span></div>
-      <div>
-        <b>Jordan Vance</b>
-        <span>Fieldnote Stationery</span>
-      </div>
-      <a href="login.html" class="dash-logout" title="Sign out" aria-label="Sign out">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
-      </a>
+  <div class="an-page-head">
+    <div>
+      <h1>Route Analytics</h1>
+      <p>A network-wide view of volume, coverage, and carrier activity.</p>
     </div>
-  </aside>
+    <div class="an-date-range">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      Jun 1 – Jun 30, 2026
+    </div>
+  </div>
 
-  <!-- ===================== MAIN ===================== -->
-  <div class="dash-main">
+  <!-- ===================== BENTO GRID ===================== -->
+  <div class="an-bento">
 
-    <header class="dash-topbar">
-      <div class="dash-topbar-left">
-        <button class="dash-menu-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
-        <div class="dash-search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input type="text" placeholder="Search tracking numbers, addresses…">
-        </div>
-      </div>
-      <div class="dash-topbar-right">
-        <button class="dash-icon-btn dash-bell" aria-label="Notifications">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span class="ping"></span>
-        </button>
-        <a href="login.html" class="btn btn-primary magnetic" style="padding:11px 20px;"><span>New Shipment <span class="btn-arrow"></span></span></a>
-        <div class="ph dash-avatar" style="min-height:unset;"><span></span></div>
-      </div>
-    </header>
-
-    <main class="dash-content">
-
-      <div class="dash-welcome">
+    <!-- Profile / welcome card -->
+    <div class="an-card an-profile-card an-span-4">
+      <div class="an-profile-top">
+        <div class="ph"><span></span></div>
         <div>
-          <h1>Welcome back, Jordan.</h1>
-          <p>Here's what's moving through your account today.</p>
+          <b>Jordan Vance</b>
+          <span>Network Operations Lead</span>
+          <span id="anProfileEmail" class="an-profile-email">jordan@example.com</span>
         </div>
       </div>
+      <p class="an-profile-quote">"Twenty‑one hubs, one promise — every parcel arrives when we said it would."</p>
+      <div class="an-profile-meta">
+        <div><b data-an-count="480">0</b><span>Cities live</span></div>
+        <div><b data-an-count="99.6" data-an-suffix="%">0</b><span>On-time</span></div>
+        <div><b data-an-count="21">0</b><span>Hubs</span></div>
+      </div>
+    </div>
 
-      <!-- STAT CARDS -->
-      <section class="dash-stats">
-        <div class="dash-stat-card">
-          <div class="dash-stat-top">
-            <div class="dash-stat-icon navy"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg></div>
-            <span class="dash-stat-delta up">+12%</span>
-          </div>
-          <div class="dash-stat-num" data-count="128">0</div>
-          <div class="dash-stat-label">Active shipments</div>
+    <!-- Line chart card -->
+    <div class="an-card an-span-8">
+      <div class="an-card-head">
+        <div>
+          <h3>Parcel Volume</h3>
+          <span class="an-sub">Daily throughput, last 30 days</span>
         </div>
-        <div class="dash-stat-card">
-          <div class="dash-stat-top">
-            <div class="dash-stat-icon brass"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
-            <span class="dash-stat-delta up">+4%</span>
-          </div>
-          <div class="dash-stat-num" data-count="99.4" data-suffix="%">0</div>
-          <div class="dash-stat-label">On-time rate</div>
+        <div class="an-chart-legend">
+          <div class="an-legend-item"><span class="an-legend-dot" style="background:var(--brass);"></span>This month</div>
+          <div class="an-legend-item"><span class="an-legend-dot" style="background:rgba(28,37,65,.3);"></span>Last month</div>
         </div>
-        <div class="dash-stat-card">
-          <div class="dash-stat-top">
-            <div class="dash-stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg></div>
-            <span class="dash-stat-delta up">+31</span>
-          </div>
-          <div class="dash-stat-num" data-count="842">0</div>
-          <div class="dash-stat-label">Delivered this month</div>
-        </div>
-        <div class="dash-stat-card">
-          <div class="dash-stat-top">
-            <div class="dash-stat-icon red"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-            <span class="dash-stat-delta down">-3%</span>
-          </div>
-          <div class="dash-stat-num" data-count="2140" data-suffix="">0</div>
-          <div class="dash-stat-label">Spend this month ($)</div>
-        </div>
-      </section>
+        <button class="an-card-more" aria-label="More options">⋯</button>
+      </div>
+      <div style="position:relative;">
+        <svg class="an-chart-svg" viewBox="0 0 600 200" preserveAspectRatio="none">
+          <path class="an-chart-area" d="M0,150 C60,120 100,140 150,110 C210,75 250,95 300,80 C360,62 400,90 450,60 C500,35 540,55 600,30 L600,200 L0,200 Z" fill="var(--brass)"></path>
+          <path class="an-chart-line" d="M0,150 C60,120 100,140 150,110 C210,75 250,95 300,80 C360,62 400,90 450,60 C500,35 540,55 600,30" stroke="var(--brass)"></path>
+          <path class="an-chart-line" d="M0,170 C60,165 100,155 150,150 C210,145 250,150 300,135 C360,128 400,132 450,118 C500,110 540,112 600,100" stroke="rgba(28,37,65,.35)" stroke-dasharray="5 5"></path>
 
-      <!-- TABLE + TRACK WIDGET -->
-      <section class="dash-grid">
-        <div class="dash-panel">
-          <div class="dash-panel-head">
-            <h3>Recent Shipments</h3>
-            <a href="404error.html" class="dash-panel-link">View all →</a>
-          </div>
-          <table class="dash-table">
-            <thead>
-              <tr><th>Tracking ID</th><th>Destination</th><th>Status</th><th>ETA</th></tr>
-            </thead>
-            <tbody>
-              <tr><td class="dash-id">MP-2291-A</td><td>Fairhaven Port</td><td><span class="dash-status transit">In Transit</span></td><td>Tomorrow, 4:30 PM</td></tr>
-              <tr><td class="dash-id">MP-2288-C</td><td>Harlow Junction</td><td><span class="dash-status delivered">Delivered</span></td><td>Jun 18, 2026</td></tr>
-              <tr><td class="dash-id">MP-2276-B</td><td>Coldharbor Terminal</td><td><span class="dash-status pending">Pending Pickup</span></td><td>Jun 21, 2026</td></tr>
-              <tr><td class="dash-id">MP-2270-D</td><td>Grayson Crossing</td><td><span class="dash-status delayed">Delayed</span></td><td>Jun 20, 2026</td></tr>
-              <tr><td class="dash-id">MP-2265-A</td><td>Elmswick Route 12</td><td><span class="dash-status delivered">Delivered</span></td><td>Jun 15, 2026</td></tr>
-            </tbody>
-          </table>
-        </div>
+          <circle class="an-chart-point" cx="0" cy="150" r="4" fill="var(--brass)" data-label="Jun 1 · 1,240 parcels"></circle>
+          <circle class="an-chart-point" cx="150" cy="110" r="4" fill="var(--brass)" data-label="Jun 8 · 1,480 parcels"></circle>
+          <circle class="an-chart-point" cx="300" cy="80" r="4" fill="var(--brass)" data-label="Jun 15 · 1,690 parcels"></circle>
+          <circle class="an-chart-point" cx="450" cy="60" r="4" fill="var(--brass)" data-label="Jun 22 · 1,820 parcels"></circle>
+          <circle class="an-chart-point" cx="600" cy="30" r="4" fill="var(--brass)" data-label="Jun 30 · 2,010 parcels"></circle>
+        </svg>
+        <div class="an-chart-tooltip"></div>
+      </div>
+    </div>
 
-        <div class="dash-panel">
-          <div class="dash-panel-head">
-            <h3>Quick Track</h3>
-          </div>
-          <div class="dash-track-input">
-            <input type="text" value="MP-2291-A" aria-label="Tracking number">
-            <button class="dash-track-btn">Track</button>
-          </div>
-          <div class="dash-track-progress">
-            <div class="node done"></div>
-            <div class="bar"><div class="bar-fill"></div></div>
-            <div class="node done"></div>
-            <div class="bar"><div class="bar-fill"></div></div>
-            <div class="node"></div>
-            <div class="bar"><div class="bar-fill"></div></div>
-            <div class="node"></div>
-          </div>
-          <div class="dash-track-caption"><span>Ashford Hub</span><span>Fairhaven Port</span></div>
-          <p style="font-size:.85rem;color:var(--ink-soft);margin-top:18px;">Currently in transit — Hub 14 → Hub 21. Estimated arrival tomorrow, 4:30 PM.</p>
-        </div>
-      </section>
+    <!-- Coverage map card -->
+    <div class="an-card an-map-card an-span-5">
+      <div class="an-card-head">
+        <div><h3>Live Coverage</h3><span class="an-sub" style="color:#9AA1B8;">Active hub network</span></div>
+        <button class="an-card-more" aria-label="More options" style="color:#C9CEDD;">⋯</button>
+      </div>
+      <svg class="an-map-svg" viewBox="0 0 500 260">
+        <path class="an-map-route" d="M50 200 Q140 130 240 170 T420 80"></path>
+        <path class="an-map-route" d="M50 200 Q110 230 200 220 T380 200"></path>
+        <path class="an-map-route" d="M240 170 Q300 120 370 130"></path>
+        <g><circle class="an-map-dot" cx="50" cy="200" r="5"></circle><circle class="an-map-pulse" cx="50" cy="200" r="5"></circle></g>
+        <g><circle class="an-map-dot" cx="240" cy="170" r="5"></circle><circle class="an-map-pulse" cx="240" cy="170" r="5"></circle></g>
+        <g><circle class="an-map-dot" cx="420" cy="80" r="5"></circle><circle class="an-map-pulse" cx="420" cy="80" r="5"></circle></g>
+        <g><circle class="an-map-dot" cx="370" cy="130" r="5"></circle><circle class="an-map-pulse" cx="370" cy="130" r="5"></circle></g>
+        <g><circle class="an-map-dot" cx="200" cy="220" r="5"></circle><circle class="an-map-pulse" cx="200" cy="220" r="5"></circle></g>
+        <g><circle class="an-map-dot" cx="380" cy="200" r="5"></circle><circle class="an-map-pulse" cx="380" cy="200" r="5"></circle></g>
+      </svg>
+      <div class="an-map-legend"><span>21 hubs online</span><span>480 cities served</span></div>
+    </div>
 
-      <!-- QUICK ACTIONS -->
-      <section class="dash-actions-grid">
-        <div class="dash-action-card">
-          <div class="dash-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg></div>
-          <h4>Schedule Pickup</h4>
-          <p>Book a carrier for your next parcel</p>
+    <!-- Activity feed -->
+    <div class="an-card an-span-4">
+      <div class="an-card-head">
+        <div><h3>Live Activity</h3><span class="an-sub">Across all hubs</span></div>
+        <button class="an-card-more" aria-label="More options">⋯</button>
+      </div>
+      <div class="an-activity-list">
+        <div class="an-activity-item">
+          <div class="an-activity-icon pickup"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg></div>
+          <div class="an-activity-body"><b>Pickup scheduled</b><span>Ashford Hub — MP-2299-F</span></div>
+          <div class="an-activity-time">2m ago</div>
         </div>
-        <div class="dash-action-card">
-          <div class="dash-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></div>
-          <h4>Print Label</h4>
-          <p>Generate and download shipping labels</p>
+        <div class="an-activity-item">
+          <div class="an-activity-icon deliver"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div class="an-activity-body"><b>Delivered</b><span>Fairhaven Port — MP-2288-C</span></div>
+          <div class="an-activity-time">14m ago</div>
         </div>
-        <div class="dash-action-card">
-          <div class="dash-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-          <h4>Manage Addresses</h4>
-          <p>Add or edit saved shipping addresses</p>
+        <div class="an-activity-item">
+          <div class="an-activity-icon sort"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+          <div class="an-activity-body"><b>Arrived at hub</b><span>Coldharbor Terminal — MP-2276-B</span></div>
+          <div class="an-activity-time">32m ago</div>
         </div>
-        <div class="dash-action-card">
-          <div class="dash-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div>
-          <h4>Delivery History</h4>
-          <p>Review every completed shipment</p>
+        <div class="an-activity-item">
+          <div class="an-activity-icon delay"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div>
+          <div class="an-activity-body"><b>Delay reported</b><span>Grayson Crossing — MP-2270-D</span></div>
+          <div class="an-activity-time">1h ago</div>
         </div>
-      </section>
+        <div class="an-activity-item">
+          <div class="an-activity-icon pickup"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg></div>
+          <div class="an-activity-body"><b>Pickup completed</b><span>Elmswick Route 12 — MP-2265-A</span></div>
+          <div class="an-activity-time">2h ago</div>
+        </div>
+      </div>
+    </div>
 
-      <!-- CHART -->
-      <section class="dash-panel">
-        <div class="dash-panel-head">
-          <h3>Shipping Volume — Last 8 Weeks</h3>
-          <a href="404.html" class="dash-panel-link">Export →</a>
-        </div>
-        <div class="dash-chart">
-          <div class="bar-col"><div class="bar" data-height="42"></div><span class="bar-label">W1</span></div>
-          <div class="bar-col"><div class="bar" data-height="58"></div><span class="bar-label">W2</span></div>
-          <div class="bar-col"><div class="bar" data-height="49"></div><span class="bar-label">W3</span></div>
-          <div class="bar-col"><div class="bar" data-height="71"></div><span class="bar-label">W4</span></div>
-          <div class="bar-col"><div class="bar" data-height="65"></div><span class="bar-label">W5</span></div>
-          <div class="bar-col"><div class="bar" data-height="80"></div><span class="bar-label">W6</span></div>
-          <div class="bar-col"><div class="bar" data-height="74"></div><span class="bar-label">W7</span></div>
-          <div class="bar-col"><div class="bar" data-height="93"></div><span class="bar-label">W8</span></div>
-        </div>
-      </section>
+    <!-- Alerts card -->
+    <div class="an-card an-span-3">
+      <div class="an-card-head">
+        <div><h3>Alerts</h3><span class="an-sub">Needs attention</span></div>
+      </div>
+      <div class="an-alert-item critical">
+        <div><b>Delay on Route 12</b><p>Weather rerouting near Grayson Crossing.</p></div>
+        <button class="an-alert-dismiss" aria-label="Dismiss">×</button>
+      </div>
+      <div class="an-alert-item">
+        <div><b>Hub capacity at 84%</b><p>Coldharbor Terminal nearing peak load.</p></div>
+        <button class="an-alert-dismiss" aria-label="Dismiss">×</button>
+      </div>
+      <div class="an-alert-item">
+        <div><b>New carrier onboarded</b><p>Route 07 has an additional driver.</p></div>
+        <button class="an-alert-dismiss" aria-label="Dismiss">×</button>
+      </div>
+    </div>
 
-    </main>
+    <!-- Upcoming pickups -->
+    <div class="an-card an-span-4">
+      <div class="an-card-head">
+        <div><h3>Upcoming Pickups</h3><span class="an-sub">Next 4 scheduled</span></div>
+        <button class="an-card-more" aria-label="More options">⋯</button>
+      </div>
+      <div class="an-schedule-list">
+        <div class="an-schedule-item">
+          <div class="an-schedule-date"><b>21</b><span>Jul</span></div>
+          <div class="an-schedule-body"><b>Fieldnote Stationery</b><span>9:00 AM — Ashford Hub</span></div>
+        </div>
+        <div class="an-schedule-item">
+          <div class="an-schedule-date"><b>22</b><span>Jul</span></div>
+          <div class="an-schedule-body"><b>Harlow &amp; Co. Freight</b><span>11:30 AM — Coldharbor Terminal</span></div>
+        </div>
+        <div class="an-schedule-item">
+          <div class="an-schedule-date"><b>23</b><span>Jul</span></div>
+          <div class="an-schedule-body"><b>Coldharbor Textiles</b><span>2:00 PM — Fairhaven Port</span></div>
+        </div>
+        <div class="an-schedule-item">
+          <div class="an-schedule-date"><b>24</b><span>Jul</span></div>
+          <div class="an-schedule-body"><b>Route 12 Bulk Order</b><span>8:15 AM — Grayson Crossing</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top routes table -->
+    <div class="an-card an-span-5">
+      <div class="an-card-head">
+        <div><h3>Top Routes</h3><span class="an-sub">By volume this month</span></div>
+        <button class="an-card-more" aria-label="More options">⋯</button>
+      </div>
+      <table class="an-table">
+        <thead><tr><th>Route</th><th>Parcels</th><th style="width:35%;">Load</th><th></th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Ashford → Fairhaven</td><td>3,420</td>
+            <td><div class="an-route-bar-track"><div class="an-route-bar-fill" data-width="92"></div></div></td>
+            <td><span class="an-tag up">+8%</span></td>
+          </tr>
+          <tr>
+            <td>Coldharbor → Grayson</td><td>2,910</td>
+            <td><div class="an-route-bar-track"><div class="an-route-bar-fill" data-width="78"></div></div></td>
+            <td><span class="an-tag up">+3%</span></td>
+          </tr>
+          <tr>
+            <td>Elmswick → Harlow</td><td>2,340</td>
+            <td><div class="an-route-bar-track"><div class="an-route-bar-fill" data-width="63"></div></div></td>
+            <td><span class="an-tag down">-2%</span></td>
+          </tr>
+          <tr>
+            <td>Dunmore → Brightwell</td><td>1,860</td>
+            <td><div class="an-route-bar-track"><div class="an-route-bar-fill" data-width="50"></div></div></td>
+            <td><span class="an-tag up">+6%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Goal donut card -->
+    <div class="an-card an-span-3">
+      <div class="an-card-head">
+        <div><h3>Monthly Goal</h3><span class="an-sub">18M parcel target</span></div>
+      </div>
+      <div class="an-donut-wrap">
+        <svg class="an-donut-svg" viewBox="0 0 100 100">
+          <circle class="an-donut-track" cx="50" cy="50" r="45"></circle>
+          <circle class="an-donut-fill" cx="50" cy="50" r="45" data-percent="74"></circle>
+        </svg>
+        <div class="an-donut-label"><b>74%</b><span>of target reached</span></div>
+      </div>
+      <div class="an-donut-legend">
+        <div><span class="dot" style="background:var(--red);"></span>13.3M delivered</div>
+        <div><span class="dot" style="background:rgba(28,37,65,.15);"></span>4.7M remaining</div>
+      </div>
+    </div>
+
   </div>
 </div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="dashboard.js"></script>
+<script>
+/* ==========================================================================
+   MERIDIAN POST — analytics-dashboard.html
+   Single-file build: all JS lives in this script block.
+   ========================================================================== */
+
+/* ==========================================================================
+   MERIDIAN POST — analytics.js
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------
+   1. Entrance timeline
+------------------------------------------------------------------------- */
+(function entrance(){
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  tl.from('.an-topbar', { y: -20, opacity: 0, duration: .5 })
+    .from('.an-page-head', { y: 16, opacity: 0, duration: .5 }, .15)
+    .from('.an-bento .an-card', { y: 28, opacity: 0, duration: .6, stagger: .07 }, .3);
+})();
+
+(function loadUserEmail(){
+  const email = window.localStorage.getItem('userEmail');
+  if(!email) return;
+
+  const profileBadge = document.getElementById('an-profile-button');
+  if(profileBadge){
+    profileBadge.textContent = email;
+  }
+
+  const profileEmail = document.getElementById('anProfileEmail');
+  if(profileEmail){
+    profileEmail.textContent = email;
+  }
+
+  const initials = email.split('@')[0]
+    .split(/[_\.\-\s]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(part => part[0].toUpperCase())
+    .join('') || email[0].toUpperCase();
+
+  const hue = Array.from(email).reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % 360;
+  const accent = `hsl(${hue}, 72%, 42%)`;
+
+  document.querySelectorAll('.an-topbar-right .ph, .an-profile-top .ph').forEach(ph => {
+    ph.style.background = accent;
+    ph.style.color = '#fff';
+    ph.style.border = 'none';
+    ph.innerHTML = `<span>${initials}</span>`;
+  });
+})();
+
+/* -------------------------------------------------------------------------
+   2. Tab switching (visual only)
+------------------------------------------------------------------------- */
+(function tabs(){
+  document.querySelectorAll('.an-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.an-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+})();
+
+/* -------------------------------------------------------------------------
+   3. Card tilt-on-hover (subtle 3D)
+------------------------------------------------------------------------- */
+(function tilt(){
+  const cards = document.querySelectorAll('.an-card');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      gsap.to(card, { rotateX: y * -4, rotateY: x * 4, transformPerspective: 800, duration: .4, ease: 'power2.out' });
+    });
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, { rotateX: 0, rotateY: 0, duration: .6, ease: 'power3.out' });
+    });
+  });
+})();
+
+/* -------------------------------------------------------------------------
+   4. Profile stat count-up
+------------------------------------------------------------------------- */
+(function profileCounters(){
+  document.querySelectorAll('[data-an-count]').forEach(el => {
+    const target = parseFloat(el.dataset.anCount);
+    if (isNaN(target)) return;
+    const counter = { val: 0 };
+    gsap.to(counter, {
+      val: target, duration: 1.6, ease: 'power2.out', delay: .7,
+      onUpdate: () => {
+        const isFloat = target % 1 !== 0;
+        el.textContent = (isFloat ? counter.val.toFixed(1) : Math.floor(counter.val).toLocaleString()) + (el.dataset.anSuffix || '');
+      }
+    });
+  });
+})();
+
+/* -------------------------------------------------------------------------
+   5. Line chart — draw path + points with hover tooltip
+------------------------------------------------------------------------- */
+(function lineChart(){
+  const svg = document.querySelector('.an-chart-svg');
+  if (!svg) return;
+  const tooltip = document.querySelector('.an-chart-tooltip');
+
+  svg.querySelectorAll('.an-chart-line').forEach(path => {
+    const len = path.getTotalLength ? path.getTotalLength() : 600;
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+    gsap.to(path, { strokeDashoffset: 0, duration: 1.6, ease: 'power2.inOut', delay: .6 });
+  });
+  svg.querySelectorAll('.an-chart-area').forEach(area => {
+    gsap.from(area, { opacity: 0, duration: 1, delay: 1 });
+  });
+  gsap.from(svg.querySelectorAll('.an-chart-point'), {
+    scale: 0, opacity: 0, duration: .4, stagger: .05, delay: 1.2, ease: 'back.out(2)', transformOrigin: '50% 50%'
+  });
+
+  svg.querySelectorAll('.an-chart-point').forEach(pt => {
+    pt.addEventListener('mouseenter', (e) => {
+      if (!tooltip) return;
+      const label = pt.dataset.label || '';
+      tooltip.textContent = label;
+      const wrapRect = svg.closest('.an-card').getBoundingClientRect();
+      const ptRect = pt.getBoundingClientRect();
+      tooltip.style.left = (ptRect.left - wrapRect.left + ptRect.width / 2) + 'px';
+      tooltip.style.top = (ptRect.top - wrapRect.top) + 'px';
+      tooltip.classList.add('show');
+    });
+    pt.addEventListener('mouseleave', () => tooltip && tooltip.classList.remove('show'));
+  });
+})();
+
+/* -------------------------------------------------------------------------
+   6. Coverage map — pulsing dots
+------------------------------------------------------------------------- */
+(function map(){
+  const wrap = document.querySelector('.an-map-svg');
+  if (!wrap) return;
+  wrap.querySelectorAll('.an-map-pulse').forEach((el, i) => {
+    gsap.to(el, {
+      opacity: 0, scale: 2.4, transformOrigin: '50% 50%', duration: 2, ease: 'power1.out',
+      repeat: -1, delay: i * .45, onStart: () => gsap.set(el, { opacity: 1, scale: 1 })
+    });
+  });
+  wrap.querySelectorAll('.an-map-route').forEach(path => {
+    const len = path.getTotalLength ? path.getTotalLength() : 300;
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+    gsap.to(path, { strokeDashoffset: 0, duration: 1.8, ease: 'power2.inOut', delay: .8 });
+  });
+})();
+
+/* -------------------------------------------------------------------------
+   7. Route progress bars fill in on view
+------------------------------------------------------------------------- */
+(function routeBars(){
+  document.querySelectorAll('.an-route-bar-fill').forEach((bar, i) => {
+    const w = bar.dataset.width || '0';
+    gsap.to(bar, { width: w + '%', duration: 1.1, ease: 'power3.out', delay: .8 + i * .08 });
+  });
+})();
+
+/* -------------------------------------------------------------------------
+   8. Donut chart fill animation
+------------------------------------------------------------------------- */
+(function donut(){
+  const fill = document.querySelector('.an-donut-fill');
+  if (!fill) return;
+  const pct = parseFloat(fill.dataset.percent || '0');
+  const offset = 283 - (283 * pct / 100);
+  gsap.to(fill, { strokeDashoffset: offset, duration: 1.6, ease: 'power2.out', delay: .6 });
+})();
+
+/* -------------------------------------------------------------------------
+   9. Activity feed staggered entrance
+------------------------------------------------------------------------- */
+(function activityFeed(){
+  const items = document.querySelectorAll('.an-activity-item');
+  if (!items.length) return;
+  gsap.from(items, { x: 16, opacity: 0, duration: .5, stagger: .07, delay: .9, ease: 'power2.out' });
+})();
+
+/* -------------------------------------------------------------------------
+   10. Alert dismiss
+------------------------------------------------------------------------- */
+(function alerts(){
+  document.querySelectorAll('.an-alert-dismiss').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.an-alert-item');
+      gsap.to(item, {
+        opacity: 0, x: 30, height: 0, marginBottom: 0, paddingTop: 0, paddingBottom: 0,
+        duration: .4, ease: 'power2.in', onComplete: () => item.remove()
+      });
+    });
+  });
+})();
+
+/* -------------------------------------------------------------------------
+   11. Schedule item entrance
+------------------------------------------------------------------------- */
+(function schedule(){
+  const items = document.querySelectorAll('.an-schedule-item');
+  if (!items.length) return;
+  gsap.from(items, { y: 14, opacity: 0, duration: .5, stagger: .08, delay: 1, ease: 'power2.out' });
+})();
+
+</script>
 </body>
 </html>

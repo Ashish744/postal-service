@@ -57,6 +57,7 @@ gsap.registerPlugin();
 ------------------------------------------------------------------------- */
 (function fieldValidation(){
   const validators = {
+    name: v => /^[A-Za-z\s]+$/.test(v.trim()) ? '' : 'Name may only contain letters and spaces',
     email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? '' : 'Enter a valid email address',
     required: v => v.trim().length ? '' : 'This field is required',
   };
@@ -192,9 +193,34 @@ gsap.registerPlugin();
       }, 2600);
     }
 
+    const emailInput = form.querySelector('#login-email');
+    if(emailInput && emailInput.value.trim()){
+      window.localStorage.setItem('userEmail', emailInput.value.trim());
+    }
+
     const redirect = form.dataset.redirect;
     if(redirect){
       setTimeout(() => { window.location.href = redirect; }, 1100);
     }
   });
+})();
+
+(function roleButtons(){
+  const form = document.querySelector('.auth-form');
+  const buttons = document.querySelectorAll('.auth-role-btn');
+  if(!form || !buttons.length) return;
+
+  function setRedirect(button){
+    buttons.forEach(btn => btn.classList.toggle('active', btn === button));
+    if(button.dataset.redirect){
+      form.dataset.redirect = button.dataset.redirect;
+    }
+  }
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => setRedirect(button));
+  });
+
+  const active = Array.from(buttons).find(btn => btn.classList.contains('active')) || buttons[0];
+  setRedirect(active);
 })();

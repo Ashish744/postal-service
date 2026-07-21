@@ -70,11 +70,25 @@
 .auth-social-row{ display:grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 34px 0; }
 .auth-social-btn{
   display:flex; align-items:center; justify-content:center; gap:10px;
-  border: 1.5px solid rgba(28,37,65,.25); padding: 13px; border-radius: var(--radius);
-  font-family: var(--font-mono); font-size: 12.5px; letter-spacing:.04em; transition: all .3s ease;
+  border: 1.5px solid rgba(33,29,24,.18);
+  padding: 15px 18px;
+  border-radius: var(--radius);
+  background: #FAF5E9 !important;
+  color: #211D18 !important;
+  min-height: 52px;
+  font-family: var(--font-mono); font-size: 13px; letter-spacing:.06em; font-weight:700;
+  text-transform: uppercase;
+  opacity: 1 !important;
+  transform: none !important;
+  transition: all .3s ease;
 }
-.auth-social-btn:hover{ border-color: var(--navy); background: rgba(28,37,65,.04); transform: translateY(-1px); }
+.auth-social-btn:hover{ border-color: rgba(28,37,65,.4); background: rgba(28,37,65,.08) !important; transform: translateY(-1px) !important; }
 .auth-social-btn svg{ width:16px; height:16px; }
+.auth-social-btn span, .auth-social-btn *{ color: inherit !important; }
+.auth-role-btn.active{
+  border-color: var(--navy);
+  background: rgba(28,37,65,.12) !important;
+}
 
 .auth-divider{ display:flex; align-items:center; gap:14px; margin-bottom: 30px; }
 .auth-divider::before, .auth-divider::after{ content:''; flex:1; height:1px; background: rgba(28,37,65,.15); }

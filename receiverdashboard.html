@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Deliveries — Meridian Post</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+   MERIDIAN POST — receiver-dashboard.html
+   Single-file build: all CSS lives in this style block.
+   ========================================================================== */
+
+:root{
+  --navy: #1C2541;
+  --navy-deep: #12182E;
+  --parchment: #F1E8D6;
+  --cream: #FAF5E9;
+  --red: #BC3A2E;
+  --brass: #A8823C;
+  --ink: #211D18;
+  --ink-soft: #4A453C;
+  --white: #FFFDF8;
+  --green: #5B8A5B;
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --ease-post: cubic-bezier(.22,1,.36,1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  font-family: var(--font-body);
+  background: var(--parchment);
+  color: var(--ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+a{ color:inherit; text-decoration:none; }
+button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+::selection{ background: var(--red); color: var(--cream); }
+@media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms !important; transition-duration:.001ms !important; } }
+
+/* ---------------------------------------------------------------------
+   Shared bits: logo, placeholders, buttons
+--------------------------------------------------------------------- */
+.logo-lockup{ display:flex; align-items:center; gap:12px; }
+.logo-mark{
+  width: auto;
+  height: 34px;
+  border-radius: 0;
+  display:block;
+  flex-shrink:0;
+  overflow:hidden;
+  filter: sepia(1) saturate(1700%) hue-rotate(-18deg) brightness(.85) contrast(1.05);
+}
+.logo-mark img, .logo-mark svg{ width:auto; height:100%; object-fit:contain; display:block; }
+.logo-text{ font-family:var(--font-display); font-size:1.2rem; font-weight:700; }
+.logo-text small{ display:block; font-family:var(--font-mono); font-size:9px; letter-spacing:.2em; color:var(--red); font-weight:600; }
+
+.ph{
+  border:1.5px dashed rgba(28,37,65,.4);
+  background: repeating-linear-gradient(135deg, rgba(28,37,65,.035) 0 10px, transparent 10px 20px);
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  color:var(--ink-soft); font-family:var(--font-mono); font-size:11px; border-radius:6px;
+}
+
+.btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:6px;
+  font-family:var(--font-mono); font-size:12.5px; letter-spacing:.05em; text-transform:uppercase; font-weight:600;
+  transition: all .35s var(--ease-post); position:relative; overflow:hidden;
+}
+.btn-primary{ background:var(--red); color:var(--cream); }
+.btn-primary:hover{ background:var(--navy); transform:translateY(-2px); }
+.btn-outline{ background:transparent; color:var(--navy); border:1.5px solid rgba(28,37,65,.3); }
+.btn-outline:hover{ border-color:var(--navy); background:rgba(28,37,65,.05); transform:translateY(-2px); }
+.btn-ghost{ background:rgba(28,37,65,.06); color:var(--navy); }
+.btn-ghost:hover{ background:var(--navy); color:var(--parchment); }
+.btn-arrow{ display:inline-block; transition: transform .3s var(--ease-post); }
+.btn:hover .btn-arrow{ transform:translateX(4px); }
+
+/* ---------------------------------------------------------------------
+   Topbar
+--------------------------------------------------------------------- */
+.rd-topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding:20px 40px; background:rgba(250,245,233,.92); backdrop-filter: blur(8px);
+  border-bottom:1.5px solid rgba(28,37,65,.1); position:sticky; top:0; z-index:100;
+}
+.rd-topbar-tag{
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--brass); border-left:1.5px solid rgba(28,37,65,.15); padding-left:16px; margin-left:4px;
+}
+.rd-topbar-right{ display:flex; align-items:center; gap:16px; }
+.rd-icon-btn{
+  width:40px; height:40px; border-radius:50%; border:1.5px solid rgba(28,37,65,.15);
+  display:flex; align-items:center; justify-content:center; position:relative; transition: all .3s var(--ease-post);
+}
+.rd-icon-btn svg{ width:17px; height:17px; stroke:var(--ink); transition:stroke .3s ease; }
+.rd-icon-btn:hover{ background:var(--navy); border-color:var(--navy); transform: translateY(-2px); }
+.rd-icon-btn:hover svg{ stroke:var(--parchment); }
+.rd-icon-btn .ping{ position:absolute; top:6px; right:7px; width:7px; height:7px; border-radius:50%; background:var(--red); }
+.rd-avatar-btn{ display:flex; align-items:center; gap:10px; padding:5px 14px 5px 5px; border-radius:30px; border:1.5px solid rgba(28,37,65,.15); transition: all .3s ease; }
+.rd-avatar-btn:hover{ border-color:var(--brass); background:rgba(168,130,60,.08); }
+.rd-avatar-btn .ph{ width:32px; height:32px; border-radius:50%; }
+.rd-avatar-btn span{ font-family:var(--font-mono); font-size:12px; }
+
+/* ---------------------------------------------------------------------
+   Content shell
+--------------------------------------------------------------------- */
+.rd-content{ max-width: 1160px; margin:0 auto; padding: 44px 40px 90px; }
+.rd-page-head{ margin-bottom: 34px; }
+.rd-page-head h1{ font-family:var(--font-display); font-size: clamp(1.7rem,3vw,2.3rem); }
+.rd-page-head p{ color:var(--ink-soft); margin-top:8px; font-size:.95rem; }
+
+/* ---------------------------------------------------------------------
+   Hero: next delivery tracker
+--------------------------------------------------------------------- */
+.rd-hero{
+  background: var(--navy); color: var(--parchment); border-radius: 16px; padding: 40px;
+  display:grid; grid-template-columns: 1.1fr .9fr; gap: 40px; position:relative; overflow:hidden; margin-bottom: 34px;
+}
+.rd-hero-noise{ position:absolute; inset:0; opacity:.05; pointer-events:none; background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size:3px 3px; }
+.rd-hero-left{ position:relative; z-index:2; }
+.rd-eyebrow{
+  font-family:var(--font-mono); font-size:11.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--brass);
+  display:flex; align-items:center; gap:10px; margin-bottom:14px;
+}
+.rd-eyebrow::before{ content:''; width:20px; height:1px; background:var(--brass); }
+.rd-hero h2{ font-family:var(--font-display); font-size: clamp(1.5rem, 2.6vw, 2rem); margin-bottom: 14px; }
+.rd-hero-sender{ font-family:var(--font-mono); font-size:12.5px; color:#C9CEDD; margin-bottom: 26px; }
+.rd-hero-sender b{ color: var(--parchment); }
+
+.rd-countdown{ display:flex; gap: 16px; margin-bottom: 30px; }
+.rd-countdown-unit{ background: rgba(241,232,214,.06); border:1px solid rgba(241,232,214,.14); border-radius:8px; padding: 12px 16px; min-width: 70px; text-align:center; }
+.rd-countdown-unit b{ display:block; font-family:var(--font-display); font-size:1.7rem; }
+.rd-countdown-unit span{ font-family:var(--font-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.1em; color:#9AA1B8; }
+
+.rd-stepper{ display:flex; align-items:center; margin-bottom: 12px; }
+.rd-step{ display:flex; flex-direction:column; align-items:center; gap:8px; flex:1; position:relative; }
+.rd-step-dot{ width:14px; height:14px; border-radius:50%; background: rgba(241,232,214,.15); border: 2px solid rgba(241,232,214,.3); z-index:2; transition: all .4s var(--ease-post); }
+.rd-step.done .rd-step-dot{ background: var(--brass); border-color: var(--brass); }
+.rd-step.active .rd-step-dot{ background: var(--red); border-color: var(--red); box-shadow: 0 0 0 5px rgba(188,58,46,.2); }
+.rd-step-line{ position:absolute; top:6px; left:-50%; width:100%; height:2px; background: rgba(241,232,214,.15); z-index:1; }
+.rd-step:first-child .rd-step-line{ display:none; }
+.rd-step.done .rd-step-line, .rd-step.active .rd-step-line{ background: var(--brass); }
+.rd-step-label{ font-family:var(--font-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.03em; color:#9AA1B8; text-align:center; }
+.rd-step.active .rd-step-label, .rd-step.done .rd-step-label{ color: var(--parchment); }
+
+.rd-hero-actions{ display:flex; gap: 14px; margin-top: 28px; flex-wrap:wrap; }
+.rd-hero-actions .btn-outline{ color: var(--parchment); border-color: rgba(241,232,214,.4); }
+.rd-hero-actions .btn-outline:hover{ background: var(--parchment); color: var(--navy); }
+
+.rd-hero-right{ position:relative; z-index:2; display:flex; flex-direction:column; }
+.rd-map-wrap{ flex:1; border-radius:12px; overflow:hidden; background: rgba(241,232,214,.05); border:1px solid rgba(241,232,214,.12); padding: 14px; }
+.rd-map-svg{ width:100%; height: 170px; }
+.rd-map-route{ fill:none; stroke: rgba(241,232,214,.35); stroke-width:1.5; stroke-dasharray:6 6; }
+.rd-map-dot{ fill: var(--brass); }
+.rd-map-truck{ fill: var(--red); }
+.rd-courier-card{ display:flex; align-items:center; gap:12px; margin-top: 16px; }
+.rd-courier-card .ph{ width:44px; height:44px; border-radius:50%; border-color: rgba(241,232,214,.4); flex-shrink:0; }
+.rd-courier-card b{ display:block; font-size:.9rem; }
+.rd-courier-card span{ font-family:var(--font-mono); font-size:10.5px; color:#9AA1B8; }
+
+/* ---------------------------------------------------------------------
+   Section cards
+--------------------------------------------------------------------- */
+.rd-section{ margin-bottom: 34px; }
+.rd-section-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:16px; margin-bottom:20px; flex-wrap:wrap; }
+.rd-section-head h3{ font-family:var(--font-display); font-size:1.35rem; }
+.rd-section-head span{ font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); }
+.rd-section-link{ font-family:var(--font-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--red); }
+.rd-section-link:hover{ text-decoration:underline; }
+
+/* preferences toggles */
+.rd-pref-grid{ display:grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+.rd-pref-card{
+  background: var(--white); border: 1.5px solid rgba(28,37,65,.1); border-radius:12px; padding: 20px 22px;
+  display:flex; align-items:center; justify-content:space-between; gap: 16px;
+  transition: all .35s var(--ease-post);
+}
+.rd-pref-card:hover{ border-color: var(--brass); box-shadow: 0 14px 30px rgba(28,37,65,.08); transform: translateY(-3px); }
+.rd-pref-info b{ display:block; font-size:.92rem; margin-bottom:4px; }
+.rd-pref-info span{ font-size:.8rem; color: var(--ink-soft); }
+
+.rd-switch{ width:46px; height:26px; border-radius:20px; background: rgba(28,37,65,.15); position:relative; flex-shrink:0; transition: background .35s ease; }
+.rd-switch::after{ content:''; position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%; background: var(--white); transition: transform .35s var(--ease-post); box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.rd-switch.on{ background: var(--brass); }
+.rd-switch.on::after{ transform: translateX(20px); }
+
+/* upcoming deliveries list */
+.rd-delivery-list{ display:flex; flex-direction:column; gap: 12px; }
+.rd-delivery-row{
+  background: var(--white); border: 1.5px solid rgba(28,37,65,.1); border-radius: 12px; padding: 18px 22px;
+  display:flex; align-items:center; gap: 18px; transition: all .35s var(--ease-post); position:relative; overflow:hidden;
+}
+.rd-delivery-row:hover{ border-color: rgba(28,37,65,.2); box-shadow: 0 16px 32px rgba(28,37,65,.09); }
+.rd-delivery-icon{ width:44px; height:44px; border-radius:10px; background: rgba(168,130,60,.12); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition: transform .35s var(--ease-post); }
+.rd-delivery-row:hover .rd-delivery-icon{ transform: scale(1.08) rotate(-6deg); }
+.rd-delivery-icon svg{ width:20px; height:20px; stroke: var(--brass); }
+.rd-delivery-body{ flex:1; min-width:0; }
+.rd-delivery-body b{ display:block; font-size:.93rem; }
+.rd-delivery-body span{ font-family: var(--font-mono); font-size:11px; color:var(--ink-soft); }
+.rd-status-tag{ font-family:var(--font-mono); font-size:10.5px; padding:5px 12px; border-radius:20px; text-transform:uppercase; letter-spacing:.03em; flex-shrink:0; }
+.rd-status-tag.transit{ background: rgba(168,130,60,.14); color:#8A6A2F; }
+.rd-status-tag.scheduled{ background: rgba(28,37,65,.08); color: var(--ink-soft); }
+.rd-status-tag.delayed{ background: rgba(188,58,46,.1); color: var(--red); }
+
+.rd-delivery-actions{ display:flex; gap:8px; opacity:0; transform: translateX(8px); transition: all .35s var(--ease-post); flex-shrink:0; }
+.rd-delivery-row:hover .rd-delivery-actions{ opacity:1; transform: translateX(0); }
+.rd-mini-btn{ font-family: var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.03em; padding:8px 14px; border-radius:20px; border: 1.5px solid rgba(28,37,65,.2); transition: all .3s ease; white-space:nowrap; }
+.rd-mini-btn:hover{ background: var(--navy); color: var(--parchment); border-color: var(--navy); }
+
+/* history table */
+.rd-history-card{ background: var(--white); border: 1.5px solid rgba(28,37,65,.1); border-radius: 12px; padding: 10px 26px; }
+.rd-table{ width:100%; border-collapse: collapse; }
+.rd-table th{ text-align:left; font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); padding: 16px 8px 12px; border-bottom: 1.5px solid rgba(28,37,65,.1); }
+.rd-table td{ padding: 15px 8px; border-bottom: 1px solid rgba(28,37,65,.06); font-size:.87rem; }
+.rd-table tr:last-child td{ border-bottom:none; }
+.rd-table tbody tr{ transition: background .25s ease; }
+.rd-table tbody tr:hover{ background: rgba(28,37,65,.03); }
+
+.rd-stars{ display:inline-flex; gap:3px; cursor:pointer; }
+.rd-star{ width:15px; height:15px; fill: rgba(28,37,65,.15); transition: fill .2s ease, transform .2s ease; }
+.rd-stars:hover .rd-star{ transform: scale(1.08); }
+.rd-star.filled{ fill: var(--brass); }
+.rd-star:hover ~ .rd-star{ fill: rgba(28,37,65,.15) !important; }
+
+/* notification channels */
+.rd-channel-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.rd-channel-card{ background: var(--white); border: 1.5px solid rgba(28,37,65,.1); border-radius: 12px; padding: 22px; text-align:center; transition: all .35s var(--ease-post); }
+.rd-channel-card:hover{ transform: translateY(-4px); box-shadow: 0 16px 32px rgba(28,37,65,.09); border-color: var(--brass); }
+.rd-channel-icon{ width:44px; height:44px; border-radius:50%; background: rgba(28,37,65,.08); display:flex; align-items:center; justify-content:center; margin: 0 auto 14px; transition: background .3s ease; }
+.rd-channel-card:hover .rd-channel-icon{ background: rgba(168,130,60,.16); }
+.rd-channel-icon svg{ width:19px; height:19px; stroke: var(--navy); }
+.rd-channel-card h4{ font-size:.94rem; margin-bottom: 6px; }
+.rd-channel-card p{ font-size:.78rem; color: var(--ink-soft); margin-bottom: 16px; }
+.rd-channel-card .rd-switch{ margin: 0 auto; }
+
+/* help card */
+.rd-help-card{
+  background: var(--cream); border: 1.5px dashed rgba(28,37,65,.25); border-radius: 12px; padding: 26px 30px;
+  display:flex; align-items:center; justify-content:space-between; gap: 20px; flex-wrap:wrap;
+}
+.rd-help-card h4{ font-family:var(--font-display); font-size:1.1rem; margin-bottom:4px; }
+.rd-help-card p{ font-size:.85rem; color: var(--ink-soft); }
+
+/* toast */
+.rd-toast{
+  position: fixed; bottom: 30px; right: 30px; z-index: 999;
+  background: var(--navy); color: var(--parchment); padding: 15px 20px; border-radius: 8px;
+  font-family: var(--font-mono); font-size: 12px; display:flex; align-items:center; gap: 10px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.25); transform: translateY(140%); opacity:0;
+}
+.rd-toast.show{ transform: translateY(0); opacity:1; }
+.rd-toast .dot{ width:7px; height:7px; border-radius:50%; background: var(--brass); flex-shrink:0; }
+
+/* ---------------------------------------------------------------------
+   Responsive
+--------------------------------------------------------------------- */
+@media (max-width: 980px){
+  .rd-hero{ grid-template-columns: 1fr; }
+  .rd-pref-grid, .rd-channel-grid{ grid-template-columns: 1fr; }
+}
+@media (max-width: 760px){
+  .rd-topbar{ padding: 16px 20px; }
+  .rd-topbar-tag{ display:none; }
+  .rd-content{ padding: 30px 20px 70px; }
+  .rd-countdown{ flex-wrap:wrap; }
+  .rd-delivery-row{ flex-wrap:wrap; }
+  .rd-delivery-actions{ opacity:1; transform:none; width:100%; }
+  .rd-history-card{ overflow-x:auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== TOPBAR ===================== -->
+<header class="rd-topbar">
+  <div class="an-topbar-left">
+    <a href="index.html" class="logo-lockup">
+      <img src="logo-dark-themed.webp" alt="Stackly logo" class="logo-mark">
+    </a>
+  </div>
+  <div class="rd-topbar-right">
+    <button class="rd-icon-btn" id="rdBell" aria-label="Notifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="ping"></span>
+    </button>
+    <button class="rd-avatar-btn">
+      <div class="ph"><span></span></div>
+      <span>Amara O.</span>
+    </button>
+  </div>
+</header>
+
+<div class="rd-content">
+
+  <div class="rd-page-head">
+    <h1>Hi Amara, here's what's on its way.</h1>
+    <p>Manage incoming deliveries, set your preferences, and see your full delivery history.</p>
+  </div>
+
+  <!-- ===================== HERO: NEXT DELIVERY ===================== -->
+  <section class="rd-hero">
+    <div class="rd-hero-noise"></div>
+    <div class="rd-hero-left">
+      <div class="rd-eyebrow">Arriving today</div>
+      <h2>Your package is on its way — Hub 21 → your door.</h2>
+      <div class="rd-hero-sender">From <b>Fieldnote Stationery</b> · Tracking <b>MP-2291-A</b></div>
+
+      <div class="rd-countdown" id="rdCountdown">
+        <div class="rd-countdown-unit"><b id="cdHours">02</b><span>Hours</span></div>
+        <div class="rd-countdown-unit"><b id="cdMinutes">14</b><span>Minutes</span></div>
+        <div class="rd-countdown-unit"><b id="cdSeconds">47</b><span>Seconds</span></div>
+      </div>
+
+      <div class="rd-stepper">
+        <div class="rd-step done"><div class="rd-step-line"></div><div class="rd-step-dot"></div><span class="rd-step-label">Picked Up</span></div>
+        <div class="rd-step done"><div class="rd-step-line"></div><div class="rd-step-dot"></div><span class="rd-step-label">Sorted</span></div>
+        <div class="rd-step active"><div class="rd-step-line"></div><div class="rd-step-dot"></div><span class="rd-step-label">In Transit</span></div>
+        <div class="rd-step"><div class="rd-step-line"></div><div class="rd-step-dot"></div><span class="rd-step-label">Delivered</span></div>
+      </div>
+
+      <div class="rd-hero-actions">
+        <a href="#" class="btn btn-primary"><span>Track Live <span class="btn-arrow">→</span></span></a>
+        <a href="#" class="btn btn-outline">Manage Delivery</a>
+      </div>
+    </div>
+
+    <div class="rd-hero-right">
+      <div class="rd-map-wrap">
+        <svg class="rd-map-svg" viewBox="0 0 400 200">
+          <path class="rd-map-route" d="M20 160 Q120 100 200 130 T380 60"></path>
+          <circle class="rd-map-dot" cx="20" cy="160" r="5"></circle>
+          <circle class="rd-map-dot" cx="380" cy="60" r="5"></circle>
+          <g id="rdTruck">
+            <circle class="rd-map-truck" cx="200" cy="130" r="7"></circle>
+          </g>
+        </svg>
+      </div>
+      <div class="rd-courier-card">
+        <div class="ph"><span></span></div>
+        <div>
+          <b>Courier: Dez R.</b>
+          <span>Vehicle MP-14 · Hub 21 dispatch</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DELIVERY PREFERENCES ===================== -->
+  <section class="rd-section">
+    <div class="rd-section-head">
+      <div><h3>Delivery Preferences</h3><span>Applied to all future deliveries</span></div>
+    </div>
+    <div class="rd-pref-grid">
+      <div class="rd-pref-card">
+        <div class="rd-pref-info"><b>Leave at door</b><span>Allow contactless drop-off when I'm not home</span></div>
+        <div class="rd-switch on" data-switch></div>
+      </div>
+      <div class="rd-pref-card">
+        <div class="rd-pref-info"><b>Signature required</b><span>Require signature confirmation on arrival</span></div>
+        <div class="rd-switch" data-switch></div>
+      </div>
+      <div class="rd-pref-card">
+        <div class="rd-pref-info"><b>SMS updates</b><span>Text me at each stage of delivery</span></div>
+        <div class="rd-switch on" data-switch></div>
+      </div>
+      <div class="rd-pref-card">
+        <div class="rd-pref-info"><b>Hold at nearest hub</b><span>Default to pickup instead of delivery</span></div>
+        <div class="rd-switch" data-switch></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== UPCOMING DELIVERIES ===================== -->
+  <section class="rd-section">
+    <div class="rd-section-head">
+      <div><h3>Upcoming Deliveries</h3><span>3 packages on the way</span></div>
+      <a href="#" class="rd-section-link">View all →</a>
+    </div>
+    <div class="rd-delivery-list">
+      <div class="rd-delivery-row">
+        <div class="rd-delivery-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg></div>
+        <div class="rd-delivery-body"><b>Fieldnote Stationery — MP-2291-A</b><span>Arriving today, by 4:30 PM</span></div>
+        <span class="rd-status-tag transit">In Transit</span>
+        <div class="rd-delivery-actions">
+          <button class="rd-mini-btn">Reschedule</button>
+          <button class="rd-mini-btn">Redirect</button>
+        </div>
+      </div>
+      <div class="rd-delivery-row">
+        <div class="rd-delivery-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+        <div class="rd-delivery-body"><b>Harlow &amp; Co. — MP-2312-E</b><span>Scheduled for Jun 24, 9:00 AM – 12:00 PM</span></div>
+        <span class="rd-status-tag scheduled">Scheduled</span>
+        <div class="rd-delivery-actions">
+          <button class="rd-mini-btn">Reschedule</button>
+          <button class="rd-mini-btn">Redirect</button>
+        </div>
+      </div>
+      <div class="rd-delivery-row">
+        <div class="rd-delivery-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div>
+        <div class="rd-delivery-body"><b>Coldharbor Textiles — MP-2305-K</b><span>Delayed — new ETA Jun 25</span></div>
+        <span class="rd-status-tag delayed">Delayed</span>
+        <div class="rd-delivery-actions">
+          <button class="rd-mini-btn">Notify Me</button>
+          <button class="rd-mini-btn">Details</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DELIVERY HISTORY ===================== -->
+  <section class="rd-section">
+    <div class="rd-section-head">
+      <div><h3>Delivery History</h3><span>Rate a delivery to help improve the network</span></div>
+      <a href="#" class="rd-section-link">View all →</a>
+    </div>
+    <div class="rd-history-card">
+      <table class="rd-table">
+        <thead><tr><th>Tracking ID</th><th>Sender</th><th>Delivered</th><th>Status</th><th>Rate</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>MP-2288-C</td><td>Harlow &amp; Co.</td><td>Jun 18, 2026</td>
+            <td><span class="rd-status-tag" style="background:rgba(91,138,91,.14);color:#3C6B3C;">Delivered</span></td>
+            <td>
+              <span class="rd-stars" data-rating="4">
+                <svg class="rd-star filled" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star filled" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star filled" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star filled" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>MP-2265-A</td><td>Elmswick Route 12</td><td>Jun 15, 2026</td>
+            <td><span class="rd-status-tag" style="background:rgba(91,138,91,.14);color:#3C6B3C;">Delivered</span></td>
+            <td>
+              <span class="rd-stars" data-rating="5">
+                <svg class="rd-star filled" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star filled" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star filled" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star filled" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star filled" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>MP-2240-B</td><td>Fieldnote Stationery</td><td>Jun 9, 2026</td>
+            <td><span class="rd-status-tag" style="background:rgba(91,138,91,.14);color:#3C6B3C;">Delivered</span></td>
+            <td>
+              <span class="rd-stars" data-rating="0">
+                <svg class="rd-star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+                <svg class="rd-star" viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8-6.2-3.3-6.2 3.3 1.2-6.8-5-4.9 6.9-1z"/></svg>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== NOTIFICATION CHANNELS ===================== -->
+  <section class="rd-section">
+    <div class="rd-section-head">
+      <div><h3>Notification Channels</h3><span>Choose how we reach you</span></div>
+    </div>
+    <div class="rd-channel-grid">
+      <div class="rd-channel-card">
+        <div class="rd-channel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v16H4z"/><path d="M4 6l8 7 8-7"/></svg></div>
+        <h4>Email</h4>
+        <p>Delivery confirmations &amp; receipts</p>
+        <div class="rd-switch on" data-switch></div>
+      </div>
+      <div class="rd-channel-card">
+        <div class="rd-channel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+        <h4>SMS</h4>
+        <p>Real-time status texts</p>
+        <div class="rd-switch on" data-switch></div>
+      </div>
+      <div class="rd-channel-card">
+        <div class="rd-channel-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+        <h4>Push Notifications</h4>
+        <p>Alerts on your device</p>
+        <div class="rd-switch" data-switch></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HELP ===================== -->
+  <div class="rd-help-card">
+    <div>
+      <h4>Missing a package or need help?</h4>
+      <p>Our support team can trace, redirect, or reschedule any delivery.</p>
+    </div>
+    <a href="contact.html" class="btn btn-ghost">Contact Support</a>
+  </div>
+
+</div>
+
+<div class="rd-toast" id="rdToast"><span class="dot"></span> <span id="rdToastMsg">Preference updated</span></div>
+
+<script>
+/* ==========================================================================
+   MERIDIAN POST — receiver-dashboard.html
+   Single-file build: all JS lives in this script block.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. Toast helper
+--------------------------------------------------------------------- */
+function showToast(msg){
+  const toast = document.getElementById('rdToast');
+  const toastMsg = document.getElementById('rdToastMsg');
+  toastMsg.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toast.classList.remove('show'), 2400);
+}
+
+/* ---------------------------------------------------------------------
+   2. Toggle switches
+--------------------------------------------------------------------- */
+document.querySelectorAll('[data-switch]').forEach(sw => {
+  sw.addEventListener('click', () => {
+    sw.classList.toggle('on');
+    const card = sw.closest('.rd-pref-card, .rd-channel-card');
+    const label = card ? card.querySelector('b, h4') : null;
+    showToast((label ? label.textContent : 'Preference') + (sw.classList.contains('on') ? ' turned on' : ' turned off'));
+  });
+});
+
+/* ---------------------------------------------------------------------
+   3. Live countdown timer
+--------------------------------------------------------------------- */
+(function countdown(){
+  let totalSeconds = 2 * 3600 + 14 * 60 + 47;
+  const hEl = document.getElementById('cdHours');
+  const mEl = document.getElementById('cdMinutes');
+  const sEl = document.getElementById('cdSeconds');
+
+  function pad(n){ return n.toString().padStart(2, '0'); }
+
+  function tick(){
+    if(totalSeconds <= 0) return;
+    totalSeconds--;
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    hEl.textContent = pad(h);
+    mEl.textContent = pad(m);
+    sEl.textContent = pad(s);
+  }
+  setInterval(tick, 1000);
+})();
+
+/* ---------------------------------------------------------------------
+   4. Animated truck moving along the route (simple loop)
+--------------------------------------------------------------------- */
+(function truckMove(){
+  const truck = document.getElementById('rdTruck');
+  if(!truck) return;
+  const path = document.querySelector('.rd-map-route');
+  const len = path.getTotalLength();
+  let progress = 0.45;
+  let dir = 1;
+
+  function animate(){
+    progress += 0.0016 * dir;
+    if(progress > 0.9 || progress < 0.1) dir *= -1;
+    const pt = path.getPointAtLength(progress * len);
+    truck.setAttribute('transform', `translate(${pt.x - 200}, ${pt.y - 130})`);
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+/* ---------------------------------------------------------------------
+   5. Star rating hover / click
+--------------------------------------------------------------------- */
+document.querySelectorAll('.rd-stars').forEach(group => {
+  const stars = Array.from(group.querySelectorAll('.rd-star'));
+
+  stars.forEach((star, i) => {
+    star.addEventListener('mouseenter', () => {
+      stars.forEach((s, j) => s.classList.toggle('filled', j <= i));
+    });
+    star.addEventListener('click', () => {
+      group.dataset.rating = i + 1;
+      showToast(`Thanks — you rated this delivery ${i + 1} star${i === 0 ? '' : 's'}`);
+    });
+  });
+
+  group.addEventListener('mouseleave', () => {
+    const rating = parseInt(group.dataset.rating || '0', 10);
+    stars.forEach((s, j) => s.classList.toggle('filled', j < rating));
+  });
+});
+
+/* ---------------------------------------------------------------------
+   6. Mini action buttons (reschedule / redirect / notify / details)
+--------------------------------------------------------------------- */
+document.querySelectorAll('.rd-mini-btn').forEach(btn => {
+  btn.addEventListener('click', () => showToast(btn.textContent + ' requested'));
+});
+
+/* ---------------------------------------------------------------------
+   7. Notification bell shake
+--------------------------------------------------------------------- */
+(function bell(){
+  const bell = document.getElementById('rdBell');
+  if(!bell) return;
+  bell.addEventListener('click', () => {
+    const svg = bell.querySelector('svg');
+    svg.style.transformOrigin = '50% 0%';
+    let frame = 0;
+    const frames = [0, 14, -14, 10, -10, 6, -6, 0];
+    const interval = setInterval(() => {
+      svg.style.transform = `rotate(${frames[frame]}deg)`;
+      frame++;
+      if(frame >= frames.length) clearInterval(interval);
+    }, 60);
+  });
+})();
+</script>
+</body>
+</html>
