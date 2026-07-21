@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Meridian Post</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<div class="dash-shell">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="dash-sidebar">
+    <a href="index.html" class="logo-lockup" aria-label="Meridian Post home">
+      <img src="logo-dark-themed.webp" alt="Meridian Post logo" class="logo-mark">
+      <span class="logo-text">Meridian Post</span>
+    </a>
+
+    <nav class="dash-nav">
+      <span class="dash-nav-label">Main</span>
+      <a href="dashboard.html" class="dash-nav-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        Overview
+      </a>
+      <a href="404error.html" class="dash-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+        Shipments <span class="dash-nav-badge">6</span>
+      </a>
+      <a href="404error.html" class="dash-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+        Track Package
+      </a>
+      <a href="404error.html" class="dash-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Addresses
+      </a>
+      <span class="dash-nav-label">Account</span>
+      <a href="404error.html" class="dash-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        Billing
+      </a>
+      <a href="404error.html" class="dash-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06A2 2 0 1 1 7.03 4.24l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 0 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.36.13.68.32 1.55 1H21a2 2 0 0 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="dash-sidebar-footer">
+      <div class="ph dash-avatar"><span></span></div>
+      <div>
+        <b>Jordan Vance</b>
+        <span>Fieldnote Stationery</span>
+      </div>
+      <a href="login.html" class="dash-logout" title="Sign out" aria-label="Sign out">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="dash-main">
+
+    <header class="dash-topbar">
+      <div class="dash-topbar-left">
+        <button class="dash-menu-toggle" aria-label="Toggle sidebar"><span></span><span></span><span></span></button>
+        <div class="dash-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" placeholder="Search tracking numbers, addresses…">
+        </div>
+      </div>
+      <div class="dash-topbar-right">
+        <button class="dash-icon-btn dash-bell" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="ping"></span>
+        </button>
+        <a href="login.html" class="btn btn-primary magnetic" style="padding:11px 20px;"><span>New Shipment <span class="btn-arrow">→</span></span></a>
+        <div class="ph dash-avatar" style="min-height:unset;"><span></span></div>
+      </div>
+    </header>
+
+    <main class="dash-content">
+
+      <div class="dash-welcome">
+        <div>
+          <h1>Welcome back, Jordan.</h1>
+          <p>Here's what's moving through your account today.</p>
+        </div>
+      </div>
+
+      <!-- STAT CARDS -->
+      <section class="dash-stats">
+        <div class="dash-stat-card">
+          <div class="dash-stat-top">
+            <div class="dash-stat-icon navy"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg></div>
+            <span class="dash-stat-delta up">+12%</span>
+          </div>
+          <div class="dash-stat-num" data-count="128">0</div>
+          <div class="dash-stat-label">Active shipments</div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-top">
+            <div class="dash-stat-icon brass"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+            <span class="dash-stat-delta up">+4%</span>
+          </div>
+          <div class="dash-stat-num" data-count="99.4" data-suffix="%">0</div>
+          <div class="dash-stat-label">On-time rate</div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-top">
+            <div class="dash-stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <span class="dash-stat-delta up">+31</span>
+          </div>
+          <div class="dash-stat-num" data-count="842">0</div>
+          <div class="dash-stat-label">Delivered this month</div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-top">
+            <div class="dash-stat-icon red"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+            <span class="dash-stat-delta down">-3%</span>
+          </div>
+          <div class="dash-stat-num" data-count="2140" data-suffix="">0</div>
+          <div class="dash-stat-label">Spend this month ($)</div>
+        </div>
+      </section>
+
+      <!-- TABLE + TRACK WIDGET -->
+      <section class="dash-grid">
+        <div class="dash-panel">
+          <div class="dash-panel-head">
+            <h3>Recent Shipments</h3>
+            <a href="404error.html" class="dash-panel-link">View all →</a>
+          </div>
+          <table class="dash-table">
+            <thead>
+              <tr><th>Tracking ID</th><th>Destination</th><th>Status</th><th>ETA</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="dash-id">MP-2291-A</td><td>Fairhaven Port</td><td><span class="dash-status transit">In Transit</span></td><td>Tomorrow, 4:30 PM</td></tr>
+              <tr><td class="dash-id">MP-2288-C</td><td>Harlow Junction</td><td><span class="dash-status delivered">Delivered</span></td><td>Jun 18, 2026</td></tr>
+              <tr><td class="dash-id">MP-2276-B</td><td>Coldharbor Terminal</td><td><span class="dash-status pending">Pending Pickup</span></td><td>Jun 21, 2026</td></tr>
+              <tr><td class="dash-id">MP-2270-D</td><td>Grayson Crossing</td><td><span class="dash-status delayed">Delayed</span></td><td>Jun 20, 2026</td></tr>
+              <tr><td class="dash-id">MP-2265-A</td><td>Elmswick Route 12</td><td><span class="dash-status delivered">Delivered</span></td><td>Jun 15, 2026</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="dash-panel">
+          <div class="dash-panel-head">
+            <h3>Quick Track</h3>
+          </div>
+          <div class="dash-track-input">
+            <input type="text" value="MP-2291-A" aria-label="Tracking number">
+            <button class="dash-track-btn">Track</button>
+          </div>
+          <div class="dash-track-progress">
+            <div class="node done"></div>
+            <div class="bar"><div class="bar-fill"></div></div>
+            <div class="node done"></div>
+            <div class="bar"><div class="bar-fill"></div></div>
+            <div class="node"></div>
+            <div class="bar"><div class="bar-fill"></div></div>
+            <div class="node"></div>
+          </div>
+          <div class="dash-track-caption"><span>Ashford Hub</span><span>Fairhaven Port</span></div>
+          <p style="font-size:.85rem;color:var(--ink-soft);margin-top:18px;">Currently in transit — Hub 14 → Hub 21. Estimated arrival tomorrow, 4:30 PM.</p>
+        </div>
+      </section>
+
+      <!-- QUICK ACTIONS -->
+      <section class="dash-actions-grid">
+        <div class="dash-action-card">
+          <div class="dash-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg></div>
+          <h4>Schedule Pickup</h4>
+          <p>Book a carrier for your next parcel</p>
+        </div>
+        <div class="dash-action-card">
+          <div class="dash-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></div>
+          <h4>Print Label</h4>
+          <p>Generate and download shipping labels</p>
+        </div>
+        <div class="dash-action-card">
+          <div class="dash-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <h4>Manage Addresses</h4>
+          <p>Add or edit saved shipping addresses</p>
+        </div>
+        <div class="dash-action-card">
+          <div class="dash-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div>
+          <h4>Delivery History</h4>
+          <p>Review every completed shipment</p>
+        </div>
+      </section>
+
+      <!-- CHART -->
+      <section class="dash-panel">
+        <div class="dash-panel-head">
+          <h3>Shipping Volume — Last 8 Weeks</h3>
+          <a href="404.html" class="dash-panel-link">Export →</a>
+        </div>
+        <div class="dash-chart">
+          <div class="bar-col"><div class="bar" data-height="42"></div><span class="bar-label">W1</span></div>
+          <div class="bar-col"><div class="bar" data-height="58"></div><span class="bar-label">W2</span></div>
+          <div class="bar-col"><div class="bar" data-height="49"></div><span class="bar-label">W3</span></div>
+          <div class="bar-col"><div class="bar" data-height="71"></div><span class="bar-label">W4</span></div>
+          <div class="bar-col"><div class="bar" data-height="65"></div><span class="bar-label">W5</span></div>
+          <div class="bar-col"><div class="bar" data-height="80"></div><span class="bar-label">W6</span></div>
+          <div class="bar-col"><div class="bar" data-height="74"></div><span class="bar-label">W7</span></div>
+          <div class="bar-col"><div class="bar" data-height="93"></div><span class="bar-label">W8</span></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>

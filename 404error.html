@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Lost in the Mail | Meridian Post</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ==========================================================================
+     MERIDIAN POST — 404.html
+     All CSS for this page lives here, scoped to this single file.
+     ========================================================================== */
+
+  :root{
+    --navy: #1C2541;
+    --navy-deep: #12182E;
+    --parchment: #F1E8D6;
+    --cream: #FAF5E9;
+    --red: #BC3A2E;
+    --brass: #A8823C;
+    --ink: #211D18;
+    --white: #FFFDF8;
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --ease-post: cubic-bezier(.22,1,.36,1);
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    font-family: var(--font-body);
+    background: var(--navy);
+    color: var(--parchment);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+
+  ::selection{ background: var(--red); color: var(--cream); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+
+  /* ---------------------------------------------------------------------- */
+  .error-page{
+    position: relative;
+    min-height: 100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 60px 24px;
+    overflow:hidden;
+  }
+
+  .error-noise{
+    position:absolute; inset:0; opacity:.05; pointer-events:none;
+    background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+
+  .error-route-svg{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .error-route-path{ fill:none; stroke: rgba(168,130,60,.45); stroke-width:1.5; stroke-dasharray: 8 8; }
+  .error-dot{ fill: var(--brass); }
+
+  .error-logo{
+    position: relative; z-index: 2;
+    display:flex; align-items:center; gap:12px;
+    margin-bottom: 60px;
+  }
+  .error-logo-mark{
+    width: 40px; height:40px; border-radius:50%;
+    border: 1.5px dashed rgba(241,232,214,.6);
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--font-mono); font-size:8.5px; text-align:center; color: var(--parchment);
+    line-height:1.15; flex-shrink:0; background: rgba(241,232,214,.06);
+  }
+  .error-logo-text{ font-family: var(--font-display); font-size:1.15rem; font-weight:700; }
+  .error-logo-text small{ display:block; font-family: var(--font-mono); font-size:9px; letter-spacing:.2em; color: var(--brass); font-weight:600; }
+
+  /* postmark stamp with 404 struck through */
+  .error-postmark{ position:relative; width: min(280px, 70vw); aspect-ratio:1; margin: 0 auto 20px; z-index:2; }
+  .error-postmark svg{ width:100%; height:100%; }
+  .error-postmark-ring-text{ font-family: var(--font-mono); font-size: 9.6px; letter-spacing:.12em; fill: var(--parchment); }
+  .error-postmark-center{ fill:none; stroke: var(--red); stroke-width:2; }
+  .error-postmark-num{ font-family: var(--font-display); font-weight:700; font-size: 74px; fill: var(--parchment); }
+  .error-postmark-stamped{
+    font-family: var(--font-mono); font-size: 13px; letter-spacing:.18em; fill: var(--red);
+    text-transform: uppercase;
+  }
+
+  .error-eyebrow{
+    position: relative; z-index:2;
+    font-family: var(--font-mono); font-size: 12.5px; letter-spacing:.2em; text-transform:uppercase;
+    color: var(--brass); display:flex; align-items:center; gap:12px; margin-bottom: 18px;
+  }
+  .error-eyebrow::before, .error-eyebrow::after{ content:''; width:24px; height:1px; background: var(--brass); }
+
+  .error-title{
+    position: relative; z-index:2;
+    font-family: var(--font-display); font-weight:600; line-height:1.1;
+    font-size: clamp(1.9rem, 4.4vw, 3rem); max-width: 640px; margin-bottom: 18px;
+  }
+  .error-title em{ font-style: italic; color: var(--red); font-weight:400; }
+
+  .error-sub{
+    position: relative; z-index:2;
+    font-size: 1.02rem; color:#C9CEDD; max-width: 480px; margin-bottom: 42px;
+  }
+
+  .error-actions{
+    position: relative; z-index:2;
+    display:flex; gap: 18px; align-items:center; flex-wrap:wrap; justify-content:center;
+    margin-bottom: 50px;
+  }
+
+  .btn{
+    position: relative; display:inline-flex; align-items:center; gap: 10px;
+    padding: 15px 30px; font-family: var(--font-mono); font-size: 13.5px; letter-spacing:.06em;
+    text-transform:uppercase; font-weight:600; border-radius: 2px; overflow:hidden;
+    transition: transform .5s var(--ease-post);
+  }
+  .btn-primary{ background: var(--red); color: var(--cream); }
+  .btn-primary::before{
+    content:''; position:absolute; inset:0; background: var(--brass);
+    transform: translateY(101%); transition: transform .45s var(--ease-post); z-index:0;
+  }
+  .btn-primary span{ position:relative; z-index:1; display:flex; align-items:center; gap:10px; }
+  .btn-primary:hover::before{ transform: translateY(0); }
+  .btn-primary:hover{ transform: translateY(-2px); }
+
+  .btn-outline{ background: transparent; color: var(--parchment); border: 1.5px solid rgba(241,232,214,.5); }
+  .btn-outline:hover{ background: var(--parchment); color: var(--navy); transform: translateY(-2px); }
+
+  .btn-arrow{ display:inline-block; transition: transform .35s var(--ease-post); }
+  .btn:hover .btn-arrow{ transform: translateX(5px); }
+
+  /* faux tracking search — "track down this page" easter egg */
+  .error-track{
+    position: relative; z-index:2;
+    width: 100%; max-width: 440px;
+    display:flex; border: 1.5px solid rgba(241,232,214,.3); border-radius: 2px; overflow:hidden;
+    background: rgba(241,232,214,.04);
+  }
+  .error-track input{
+    flex:1; padding: 14px 16px; border:none; background:transparent; color: var(--parchment);
+    font-family: var(--font-mono); font-size:13px;
+  }
+  .error-track input::placeholder{ color:#7C84A0; }
+  .error-track button{
+    padding: 0 22px; background: rgba(241,232,214,.08); color: var(--brass);
+    font-family: var(--font-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.06em;
+    transition: background .3s ease;
+  }
+  .error-track button:hover{ background: rgba(241,232,214,.16); }
+
+  .error-track-msg{
+    position: relative; z-index:2;
+    font-family: var(--font-mono); font-size: 11.5px; color: var(--brass);
+    margin-top: 14px; min-height: 16px; opacity:0;
+  }
+  .error-track-msg.show{ opacity:1; }
+
+  .error-links{
+    position: relative; z-index:2;
+    margin-top: 56px; display:flex; gap: 30px; flex-wrap:wrap; justify-content:center;
+    font-family: var(--font-mono); font-size: 12px; letter-spacing:.05em; text-transform:uppercase;
+  }
+  .error-links a{ color:#C9CEDD; position:relative; padding-bottom:4px; }
+  .error-links a::after{
+    content:''; position:absolute; left:0; bottom:0; width:100%; height:1px;
+    background: var(--brass); transform: scaleX(0); transform-origin: right; transition: transform .4s var(--ease-post);
+  }
+  .error-links a:hover::after{ transform: scaleX(1); transform-origin: left; }
+  .error-links a:hover{ color: var(--parchment); }
+
+  .error-code-label{
+    position: relative; z-index:2;
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing:.2em; text-transform:uppercase;
+    color: #7C84A0; margin-top: 60px;
+  }
+
+  @media (max-width: 520px){
+    .error-actions{ flex-direction:column; width:100%; }
+    .error-actions .btn{ width:100%; justify-content:center; }
+    .error-links{ gap: 18px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<main class="error-page">
+  <div class="error-noise"></div>
+
+  <svg class="error-route-svg" viewBox="0 0 1200 800" preserveAspectRatio="none">
+    <path class="error-route-path" d="M -50 200 C 200 260, 320 120, 500 220 S 780 380, 1250 300"></path>
+    <path class="error-route-path" d="M -50 640 C 220 560, 380 720, 620 600 S 950 460, 1250 560"></path>
+    <circle class="error-dot" cx="140" cy="230" r="4"></circle>
+    <circle class="error-dot" cx="470" cy="235" r="4"></circle>
+    <circle class="error-dot" cx="820" cy="330" r="4"></circle>
+    <circle class="error-dot" cx="220" cy="610" r="4"></circle>
+    <circle class="error-dot" cx="600" cy="608" r="4"></circle>
+    <circle class="error-dot" cx="980" cy="500" r="4"></circle>
+  </svg>
+
+  <a href="index.html" class="error-logo">
+    <span class="error-logo-mark">LOGO<br>HERE</span>
+    <span class="error-logo-text">Meridian Post<small>Est. Route No. 07</small></span>
+  </a>
+
+  <div class="error-postmark">
+    <svg viewBox="0 0 300 300">
+      <circle class="error-postmark-center" cx="150" cy="150" r="120"></circle>
+      <circle class="error-postmark-center" cx="150" cy="150" r="98" stroke-dasharray="2 6"></circle>
+      <path id="errorRingPath" d="M 150,150 m -132,0 a 132,132 0 1,1 264,0 a 132,132 0 1,1 -264,0" fill="none"></path>
+      <text class="error-postmark-ring-text">
+        <textPath href="#errorRingPath" startOffset="2%">MERIDIAN POST · RETURN TO SENDER · UNDELIVERABLE · </textPath>
+      </text>
+      <text class="error-postmark-num" x="150" y="140" text-anchor="middle">404</text>
+      <text class="error-postmark-stamped" x="150" y="175" text-anchor="middle">Address Not Found</text>
+    </svg>
+  </div>
+
+  <div class="error-eyebrow">Return to sender</div>
+  <h1 class="error-title">This page never made it to the <em>sorting hub</em>.</h1>
+  <p class="error-sub">The address you're looking for doesn't exist, moved, or got misrouted somewhere along the line. Let's get you back on a known route.</p>
+
+  <div class="error-actions">
+    <a href="index.html" class="btn btn-primary" id="errorHomeBtn"><span>Back to Home <span class="btn-arrow">→</span></span></a>
+    <a href="contact.html" class="btn btn-outline">Contact Support</a>
+  </div>
+
+  <form class="error-track" id="errorTrackForm">
+    <input type="text" id="errorTrackInput" placeholder="Or try searching a page / tracking number…" autocomplete="off">
+    <button type="submit">Search →</button>
+  </form>
+  <div class="error-track-msg" id="errorTrackMsg"></div>
+
+  <nav class="error-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+    <a href="blog.html">Blog</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <div class="error-code-label">Error Code · MP-404-UNDELIVERABLE</div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+  /* ==========================================================================
+     MERIDIAN POST — 404.html
+     All JS for this page lives here, scoped to this single file.
+     ========================================================================== */
+
+  /* ---------------------------------------------------------------------
+     1. Route paths draw in on load
+  --------------------------------------------------------------------- */
+  document.querySelectorAll('.error-route-path').forEach(path => {
+    const len = path.getTotalLength ? path.getTotalLength() : 500;
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+    gsap.to(path, { strokeDashoffset: 0, duration: 2.4, ease: 'power2.inOut', delay: .3 });
+  });
+
+  /* ---------------------------------------------------------------------
+     2. Entrance timeline
+  --------------------------------------------------------------------- */
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+  tl.from('.error-logo', { y: -20, opacity: 0, duration: .6 })
+    .from('.error-postmark', { scale: 1.6, opacity: 0, rotate: -25, duration: 1, ease: 'back.out(1.5)' }, .15)
+    .from('.error-eyebrow', { y: 16, opacity: 0, duration: .5 }, .55)
+    .from('.error-title', { y: 26, opacity: 0, duration: .7 }, .65)
+    .from('.error-sub', { y: 20, opacity: 0, duration: .6 }, .8)
+    .from('.error-actions .btn', { y: 18, opacity: 0, duration: .5, stagger: .1 }, .95)
+    .from('.error-track', { y: 16, opacity: 0, duration: .5 }, 1.1)
+    .from('.error-links a', { y: 12, opacity: 0, duration: .4, stagger: .06 }, 1.25)
+    .from('.error-code-label', { opacity: 0, duration: .5 }, 1.5);
+
+  /* ambient float on the postmark */
+  gsap.to('.error-postmark', { y: -12, duration: 3.2, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.6 });
+
+  /* drifting route dots */
+  gsap.to('.error-dot', {
+    y: 'random(-14,14)', x: 'random(-10,10)', duration: 4, ease: 'sine.inOut',
+    yoyo: true, repeat: -1, stagger: { each: .3, from: 'random' }
+  });
+
+  /* ---------------------------------------------------------------------
+     3. Magnetic hover on primary CTA
+  --------------------------------------------------------------------- */
+  const homeBtn = document.getElementById('errorHomeBtn');
+  homeBtn.addEventListener('mousemove', e => {
+    const r = homeBtn.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width / 2;
+    const y = e.clientY - r.top - r.height / 2;
+    gsap.to(homeBtn, { x: x * 0.25, y: y * 0.45, duration: .5, ease: 'power3.out' });
+  });
+  homeBtn.addEventListener('mouseleave', () => {
+    gsap.to(homeBtn, { x: 0, y: 0, duration: .6, ease: 'elastic.out(1,0.4)' });
+  });
+
+  /* ---------------------------------------------------------------------
+     4. Playful "track down this page" search — always comes up empty
+  --------------------------------------------------------------------- */
+  const trackForm = document.getElementById('errorTrackForm');
+  const trackInput = document.getElementById('errorTrackInput');
+  const trackMsg = document.getElementById('errorTrackMsg');
+
+  trackForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const val = trackInput.value.trim();
+    const msg = val
+      ? `No route found for "${val}" — it may have been delivered to a different address.`
+      : 'Enter something to search for first.';
+    trackMsg.textContent = msg;
+    gsap.fromTo(trackMsg, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: .4, ease: 'power2.out', onStart: () => trackMsg.classList.add('show') });
+    gsap.fromTo(trackForm, { x: 0 }, { x: -6, duration: .07, repeat: 5, yoyo: true, ease: 'power1.inOut' });
+  });
+</script>
+</body>
+</html>

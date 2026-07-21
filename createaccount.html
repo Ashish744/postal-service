@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account — Meridian Post</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <!-- ===================== BRAND PANEL ===================== -->
+  <aside class="auth-brand">
+    <div class="auth-brand-noise"></div>
+    <svg class="auth-brand-route" viewBox="0 0 600 800" preserveAspectRatio="none">
+      <path d="M -40 200 C 140 260, 220 120, 400 220 S 620 340, 700 300"></path>
+      <circle cx="120" cy="220" r="4"></circle>
+      <circle cx="340" cy="200" r="4"></circle>
+      <circle cx="520" cy="310" r="4"></circle>
+    </svg>
+
+    <div class="auth-brand-top">
+      <a href="index.html" class="logo-lockup" aria-label="Meridian Post home">
+        <img src="logo-dark-themed.webp" alt="Meridian Post logo" class="logo-mark">
+        <span class="logo-text">Meridian Post<small>Est. Route No. 07</small></span>
+      </a>
+    </div>
+
+    <div class="auth-brand-mid">
+      <div class="eyebrow">Join the network</div>
+      <h1>Open an account and start shipping in minutes.</h1>
+      <p>Get tracked pickups, saved addresses, and rate history in one dashboard — free to set up.</p>
+      <div class="auth-postmark">
+        <svg viewBox="0 0 300 300">
+          <circle cx="150" cy="150" r="120" fill="none" stroke="var(--red)" stroke-width="2"></circle>
+          <circle cx="150" cy="150" r="98" fill="none" stroke="var(--parchment)" stroke-width="1" stroke-dasharray="2 6"></circle>
+          <path id="signupRingPath" d="M 150,150 m -132,0 a 132,132 0 1,1 264,0 a 132,132 0 1,1 -264,0" fill="none"></path>
+          <text font-family="'JetBrains Mono', monospace" font-size="10.4" letter-spacing="1.5" fill="var(--parchment)">
+            <textPath href="#signupRingPath" startOffset="2%">MERIDIAN POST · NEW ACCOUNT · WELCOME ABOARD · </textPath>
+          </text>
+          <path d="M150 110 l10 24 26 2 -20 17 7 25 -23 -14 -23 14 7 -25 -20 -17 26 -2 z" fill="var(--red)"></path>
+        </svg>
+      </div>
+    </div>
+
+    <div class="auth-brand-quote">
+      “Their tracking is the first I've used that actually matches reality.”<br>
+      <b>— Desmond Okafor,</b> Harlow &amp; Co.
+    </div>
+  </aside>
+
+  <!-- ===================== FORM PANEL ===================== -->
+  <main class="auth-form-panel">
+    <div class="auth-form-wrap">
+
+      <div class="auth-form-top">
+        <a href="index.html" class="auth-mobile-logo logo-lockup" aria-label="Meridian Post home">
+          <img src="logo-dark-themed.webp" alt="Meridian Post logo" class="logo-mark">
+          <span class="logo-text">Meridian Post</span>
+        </a>
+        <a href="login.html" class="auth-back-link">Have an account? Sign in</a>
+      </div>
+
+      <div class="auth-heading">
+        <div class="eyebrow">Create your account</div>
+        <h2>Let's get you set up</h2>
+        <p>Just a couple of steps — your dashboard is ready as soon as you finish.</p>
+      </div>
+
+      <div class="auth-steps">
+        <div class="auth-step is-active"><div class="auth-step-dot">1</div><span class="auth-step-label">Account</span></div>
+        <div class="auth-step-line"></div>
+        <div class="auth-step"><div class="auth-step-dot">2</div><span class="auth-step-label">Details</span></div>
+      </div>
+
+      <form class="auth-form" data-redirect="dashboard.html">
+
+        <!-- STEP 1 -->
+        <fieldset class="auth-fieldset is-active" data-step="1">
+          <div class="auth-field">
+            <label for="signup-name">Full name</label>
+            <div class="auth-input-row">
+              <input type="text" id="signup-name" data-validate="required" placeholder="Jordan Vance">
+            </div>
+            <div class="auth-field-msg"></div>
+          </div>
+
+          <div class="auth-field">
+            <label for="signup-email">Email address</label>
+            <div class="auth-input-row">
+              <input type="email" id="signup-email" data-validate="required email" placeholder="you@example.com">
+            </div>
+            <div class="auth-field-msg"></div>
+          </div>
+
+          <div class="auth-field">
+            <label for="password">Password</label>
+            <div class="auth-input-row">
+              <input type="password" id="password" data-validate="required minlen6" placeholder="Create a password">
+              <button type="button" class="auth-toggle-visibility" data-target="password">Show</button>
+            </div>
+            <div class="auth-field-msg"></div>
+            <div class="pw-strength">
+              <div class="pw-strength-track"><div class="pw-strength-bar"></div></div>
+              <span class="pw-strength-label"></span>
+            </div>
+          </div>
+
+          <div class="auth-step-actions">
+            <button type="button" class="btn btn-primary step-next magnetic"><span>Continue <span class="btn-arrow">→</span></span></button>
+          </div>
+        </fieldset>
+
+        <!-- STEP 2 -->
+        <fieldset class="auth-fieldset" data-step="2">
+          <div class="auth-field">
+            <label for="signup-company">Company (optional)</label>
+            <div class="auth-input-row">
+              <input type="text" id="signup-company" placeholder="Fieldnote Stationery">
+            </div>
+          </div>
+
+          <div class="auth-field">
+            <label for="signup-phone">Phone number</label>
+            <div class="auth-input-row">
+              <input type="tel" id="signup-phone" data-validate="required" placeholder="+1 (555) 000-0000">
+            </div>
+            <div class="auth-field-msg"></div>
+          </div>
+
+          <div class="auth-field">
+            <label for="signup-address">Primary shipping address</label>
+            <div class="auth-input-row">
+              <input type="text" id="signup-address" data-validate="required" placeholder="Street, city, postal code">
+            </div>
+            <div class="auth-field-msg"></div>
+          </div>
+
+          <div class="auth-row-between">
+            <label class="auth-check"><input type="checkbox" required> I agree to the Terms of Service &amp; Privacy Policy</label>
+          </div>
+
+          <div class="auth-step-actions">
+            <button type="button" class="btn btn-outline step-prev magnetic">← Back</button>
+            <button type="submit" class="btn btn-primary auth-submit magnetic"><span>Create Account <span class="btn-arrow">→</span></span></button>
+          </div>
+        </fieldset>
+
+      </form>
+
+      <div class="auth-footer-link">Already shipping with us? <a href="login.html">Sign in</a></div>
+    </div>
+  </main>
+</div>
+
+<div class="auth-toast"><span class="dot"></span> Account created — redirecting to your dashboard…</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>
