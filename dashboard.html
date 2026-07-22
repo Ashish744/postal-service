@@ -525,10 +525,18 @@ input,textarea,select{ font-family:inherit; }
           <div class="an-schedule-date"><b>23</b><span>Jul</span></div>
           <div class="an-schedule-body"><b>Coldharbor Textiles</b><span>2:00 PM — Fairhaven Port</span></div>
         </div>
-        <div class="an-schedule-item">
+        <!-- <div class="an-schedule-item">
           <div class="an-schedule-date"><b>24</b><span>Jul</span></div>
           <div class="an-schedule-body"><b>Route 12 Bulk Order</b><span>8:15 AM — Grayson Crossing</span></div>
+        </div> -->
+        <!-- <div class="an-schedule-item">
+          <div class="an-schedule-date"><b>25</b><span>Jul</span></div>
+          <div class="an-schedule-body"><b>Northern Orchard Supplies</b><span>10:45 AM — Ridgeway Depot</span></div>
         </div>
+        <div class="an-schedule-item">
+          <div class="an-schedule-date"><b>26</b><span>Jul</span></div>
+          <div class="an-schedule-body"><b>Meridian Labs Cargo</b><span>1:30 PM — Westvale Hub</span></div>
+        </div> -->
       </div>
     </div>
 
@@ -793,7 +801,10 @@ input,textarea,select{ font-family:inherit; }
 (function schedule(){
   const items = document.querySelectorAll('.an-schedule-item');
   if (!items.length) return;
-  gsap.from(items, { y: 14, opacity: 0, duration: .5, stagger: .08, delay: 1, ease: 'power2.out' });
+  gsap.fromTo(items,
+    { y: 14, opacity: 0 },
+    { y: 0, opacity: 1, duration: .5, stagger: .08, delay: 1, ease: 'power2.out' }
+  );
 })();
 
 </script>
