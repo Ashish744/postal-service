@@ -524,6 +524,9 @@ p.lede{ font-size: 1.15rem; color: var(--ink-soft); max-width: 560px; }
 .footer-socials a:hover{ color: var(--brass); border-color: var(--brass); transform: translateY(-2px); }
 .footer-socials svg{ width:16px; height:16px; display:block; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
 
+/* Make footer logo larger for stronger brand presence */
+.footer-brand .logo-mark{ width: clamp(160px, 14vw, 200px); height: auto; }
+
 /* ================================ INNER PAGE HERO =============================== */
 .page-hero{
   background: var(--navy); color: var(--parchment); padding: 200px 0 100px; position:relative; overflow:hidden;
@@ -725,4 +728,9 @@ p.lede{ font-size: 1.15rem; color: var(--ink-soft); max-width: 560px; }
 }
 
 /* Larger logo specifically for the navbar (keeps footer size unchanged) */
-.nav-inner .logo-mark{ width: clamp(130px, 10vw, 160px); }
+.nav-inner .logo-mark{ width: clamp(150px, 12vw, 200px); }
+
+/* mobile override for navbar logo to match footer sizing better */
+@media (max-width: 720px){
+  .logo-mark{ width: clamp(140px, 18vw, 180px); }
+}
