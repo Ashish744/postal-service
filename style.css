@@ -455,7 +455,6 @@ p.lede{ font-size: 1.15rem; color: var(--ink-soft); max-width: 560px; }
 .testi-mark{ font-family: var(--font-display); font-size: 4rem; color: var(--red); line-height:1; margin-bottom:6px; }
 .testi-quote{ font-family: var(--font-display); font-size: 1.28rem; font-style:italic; line-height:1.45; margin-bottom: 26px; }
 .testi-person{ display:flex; align-items:center; gap:14px; }
-.testi-avatar{ width:44px; height:44px; border-radius:50%; flex-shrink:0; }
 .testi-person b{ display:block; font-size:.92rem; }
 .testi-person span{ font-family: var(--font-mono); font-size:11.5px; color: var(--ink-soft); }
 .testi-viewport{ overflow:hidden; }

@@ -68,7 +68,7 @@ input,textarea,select{ font-family:inherit; }
 
 .logo-mark{
   width: auto;
-  height: 34px;
+  height: 40px;
   border-radius: 0;
   display:block;
   flex-shrink:0;
@@ -308,6 +308,7 @@ input,textarea,select{ font-family:inherit; }
   .an-content{ padding: 24px; }
   .an-topbar{ padding: 16px 20px; }
   .an-topbar-left{ gap: 18px; }
+  .an-topbar-right{ gap: 12px; }
   .logo-mark{ height: 28px; }
   .logo-text{ display: none; }
   .an-tabs{ display:none; }
@@ -339,7 +340,10 @@ input,textarea,select{ font-family:inherit; }
 <!-- ===================== TOPBAR ===================== -->
 <header class="an-topbar">
   <div class="an-topbar-left">
-    <img src="logo-dark-themed.webp" alt="Stackly logo" class="logo-mark">
+    <a href="index.html" class="logo-lockup" aria-label="Stackly home">
+      <img src="logo-dark-themed.webp" alt="Stackly logo" class="logo-mark">
+      <span class="logo-text"></span>
+    </a>
   </div>
   <div class="an-topbar-right">
     <button class="an-icon-btn" aria-label="Notifications" onclick="window.location.href='404error.html'">
