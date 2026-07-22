@@ -308,7 +308,25 @@ input,textarea,select{ font-family:inherit; }
   .an-content{ padding: 24px; }
   .an-topbar{ padding: 16px 20px; }
   .an-topbar-left{ gap: 18px; }
+  .logo-mark{ height: 28px; }
+  .logo-text{ display: none; }
   .an-tabs{ display:none; }
+
+/* footer */
+.an-footer{
+  padding: 18px 40px; border-top: 1px solid rgba(28,37,65,.06); display:flex; justify-content:flex-end; gap:12px; background: transparent;
+}
+.an-footer .an-logout-btn{ margin-left: auto; }
+
+/* logout button styling */
+.an-logout-btn{
+  padding: 10px 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 13px; letter-spacing: .04em;
+  border: 1.5px solid rgba(28,37,65,.12); background: transparent; color: var(--navy); cursor: pointer;
+  transition: all .22s var(--ease-post); box-shadow: 0 6px 18px rgba(28,37,65,.06);
+}
+.an-logout-btn:hover{ background: var(--red); color: var(--white); border-color: var(--red); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(188,58,46,.12); }
+.an-logout-btn:active{ transform: translateY(0); box-shadow: 0 6px 16px rgba(28,37,65,.06); }
+.an-logout-btn:focus{ outline: 3px solid rgba(28,37,65,.08); }
   .an-span-3, .an-span-4, .an-span-5, .an-span-6, .an-span-7, .an-span-8, .an-span-12{ grid-column: span 12; }
   .an-donut-wrap{ flex-direction:column; align-items:flex-start; }
 }
@@ -324,9 +342,6 @@ input,textarea,select{ font-family:inherit; }
     <img src="logo-dark-themed.webp" alt="Stackly logo" class="logo-mark">
   </div>
   <div class="an-topbar-right">
-    <button class="an-icon-btn" aria-label="Search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-    </button>
     <button class="an-icon-btn" aria-label="Notifications" onclick="window.location.href='404error.html'">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       <span class="ping"></span>
@@ -338,6 +353,8 @@ input,textarea,select{ font-family:inherit; }
   </div>
 </header>
 
+  
+
 <div class="an-content">
 
   <div class="an-page-head">
@@ -345,7 +362,7 @@ input,textarea,select{ font-family:inherit; }
       <h1>Route Analytics</h1>
       <p>A network-wide view of volume, coverage, and carrier activity.</p>
     </div>
-    <div class="an-date-range">
+    <div class="an-date-range" onclick="window.location.href='404error.html'" style="cursor:pointer;">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
       Jun 1 – Jun 30, 2026
     </div>
@@ -766,5 +783,8 @@ input,textarea,select{ font-family:inherit; }
 })();
 
 </script>
+<footer class="an-footer">
+  <button class="btn btn-outline an-logout-btn" onclick="localStorage.removeItem('userEmail'); window.location.href='login.html';">Logout</button>
+</footer>
 </body>
 </html>
